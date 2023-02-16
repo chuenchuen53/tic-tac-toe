@@ -2,5 +2,7 @@
 .vscode/
 .idea/
 out/
+target/
+*.iml
 node_modules/
 build
