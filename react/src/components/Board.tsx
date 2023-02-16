@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { Board as BoardTyping, GameStatus } from "../typing/TicTacToe";
-import { Chess } from "./Cell";
+import { Cell } from "./Cell";
 
 interface Props {
   board: BoardTyping;
@@ -46,12 +46,13 @@ export const Board = (props: Props) => {
               alignItems: "center",
               width: "100px",
               height: "100px",
-              bgcolor: inWiningPattern(rowIndex, columnIndex, winningPattern) ? "gold" : "primary.light",
+              fontSize: "2.5rem",
+              bgcolor: inWiningPattern(rowIndex, columnIndex, winningPattern) ? "gold" : "primary.main",
               cursor: canClick(rowIndex, columnIndex) ? "pointer" : "default",
             }}
-            onClick={isInProgress && clickCell ? () => handleOnClick(rowIndex, columnIndex) : undefined}
+            onClick={() => handleOnClick(rowIndex, columnIndex)}
           >
-            {<Chess element={element} />}
+            {<Cell element={element} />}
           </Box>
         ))
       )}

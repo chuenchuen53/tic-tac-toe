@@ -7,13 +7,13 @@ interface Props {
   element: TicTacToeElement | null;
 }
 
-export const Chess = (props: Props) => {
+export const Cell = (props: Props) => {
   const { element } = props;
   switch (element) {
     case TicTacToeElement.X:
-      return <CloseIcon color="error" />;
+      return <CloseIcon color="error" fontSize="inherit" />;
     case TicTacToeElement.O:
-      return <CircleOutlinedIcon color="success" />;
+      return <CircleOutlinedIcon color="success" fontSize="inherit" />;
     default:
       return null;
   }

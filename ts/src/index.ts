@@ -31,10 +31,8 @@ app.post("/api/input", function (req: Request, res: Response) {
   }
   const { rowIndex, columnIndex } = body as InputRequest;
   const success = ticTacToe.input(rowIndex, columnIndex);
-  console.log("file: index.ts:38 ~ success", success);
   if (success) {
     const resp = getGameData();
-    console.log("file: index.ts:40 ~ resp", resp);
     res.json(resp);
   } else {
     res.status(400);
