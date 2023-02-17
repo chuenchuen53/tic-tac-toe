@@ -41,7 +41,7 @@ export class Api {
   static async resetGame(): Promise<GetGameResponse | null> {
     try {
       const res = await fetch(PREFIX + "reset", {
-        method: "POST",
+        method: "DELETE",
       });
       return await res.json();
     } catch (e) {

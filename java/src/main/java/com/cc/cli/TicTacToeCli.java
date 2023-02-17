@@ -1,7 +1,14 @@
+package com.cc.cli;
+
+import com.cc.tictactoe.GameStatus;
+import com.cc.tictactoe.TicTacToe;
+import com.cc.tictactoe.TicTacToeElement;
+
 import java.util.Scanner;
 
+
 public class TicTacToeCli extends TicTacToe {
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     public TicTacToeCli(TicTacToeElement turn) {
         super(turn);
@@ -11,11 +18,11 @@ public class TicTacToeCli extends TicTacToe {
         TicTacToeElement[][] board = getBoard();
         String rowSeparator = "--+---+--";
         for (int i = 0; i < board.length; i++) {
-            String row = "";
+            StringBuilder row = new StringBuilder();
             for (int j = 0; j < board[i].length; j++) {
-                row += board[i][j] == null ? " " : board[i][j].toString();
+                row.append(board[i][j] == null ? " " : board[i][j].toString());
                 if (j < board[i].length - 1) {
-                    row += " | ";
+                    row.append(" | ");
                 }
             }
             System.out.println(row);
@@ -51,21 +58,24 @@ public class TicTacToeCli extends TicTacToe {
     public boolean isInProgress() {
         GameStatus status = getGameStatus();
         switch (status) {
-            case DRAW:
+            case DRAW -> {
                 System.out.println("Draw!");
                 return false;
-            case X_WINS:
+            }
+            case X_WINS -> {
                 System.out.println("X wins!");
                 printBoard();
                 return false;
-            case O_WINS:
+            }
+            case O_WINS -> {
                 System.out.println("O wins!");
                 printBoard();
                 return false;
-            case IN_PROGRESS:
+            }
+            case IN_PROGRESS -> {
                 return true;
-            default:
-                throw new IllegalStateException("Unexpected value: " + status);
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + status);
         }
     }
 
@@ -74,16 +84,20 @@ public class TicTacToeCli extends TicTacToe {
             System.out.println("Play again? (y/n)");
             String response = scanner.next();
             switch (response) {
-                case "y":
-                    TicTacToeElement newTurn = getStartTurn() == TicTacToeElement.X ? TicTacToeElement.O : TicTacToeElement.X;
+                case "y" -> {
+                    TicTacToeElement newTurn = getStartTurn() == TicTacToeElement.X ? TicTacToeElement.O :
+                            TicTacToeElement.X;
                     resetBoard(newTurn);
                     System.out.println("New game started with " + newTurn + "first");
                     return true;
-                case "n":
+                }
+                case "n" -> {
                     return false;
-                default:
+                }
+                default -> {
                     System.out.println("Invalid input");
                     return resetBoardFromCli();
+                }
             }
         } catch (Exception e) {
             System.out.println("Invalid input");

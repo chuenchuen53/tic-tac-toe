@@ -40,7 +40,7 @@ app.post("/api/input", function (req: Request, res: Response) {
   }
 });
 
-app.post("/api/reset", function (req: Request, res: Response) {
+app.delete("/api/reset", function (req: Request, res: Response) {
   const newTurn = ticTacToe.getTurn() === TicTacToeElement.X ? TicTacToeElement.O : TicTacToeElement.X;
   ticTacToe.resetBoard(newTurn);
   const resp = getGameData();

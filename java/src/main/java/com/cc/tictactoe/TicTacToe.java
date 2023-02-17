@@ -1,3 +1,5 @@
+package com.cc.tictactoe;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -12,8 +14,8 @@ public class TicTacToe {
             {{0, 0}, {1, 1}, {2, 2}},
             {{0, 2}, {1, 1}, {2, 0}}
     };
-    private TicTacToeElement[][] board = new TicTacToeElement[3][3];
-    private TicTacToeElement startTurn;
+    private final TicTacToeElement[][] board = new TicTacToeElement[3][3];
+    private final TicTacToeElement startTurn;
     private TicTacToeElement turn;
 
     public TicTacToe(TicTacToeElement turn) {
@@ -24,9 +26,7 @@ public class TicTacToe {
     public TicTacToeElement[][] getBoard() {
         TicTacToeElement[][] copy = new TicTacToeElement[3][3];
         for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                copy[i][j] = board[i][j];
-            }
+            System.arraycopy(board[i], 0, copy[i], 0, board[i].length);
         }
         return copy;
     }
@@ -67,9 +67,7 @@ public class TicTacToe {
     }
 
     private boolean allFilled() {
-        return Arrays.stream(board)
-                .flatMap(Arrays::stream)
-                .allMatch(Objects::nonNull);
+        return Arrays.stream(board).flatMap(Arrays::stream).allMatch(Objects::nonNull);
     }
 
     private TicTacToeElement checkWinner() {

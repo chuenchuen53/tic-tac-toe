@@ -1,11 +1,14 @@
+package com.cc.cli;
+
+import com.cc.tictactoe.TicTacToeElement;
+
 public class Main {
     static TicTacToeCli game = new TicTacToeCli(TicTacToeElement.X);
 
     public static void main(String[] args) {
-        while (true) {
+        do {
             playGame();
-            if (!game.resetBoardFromCli()) break;
-        }
+        } while (game.resetBoardFromCli());
     }
 
     public static void playGame() {
