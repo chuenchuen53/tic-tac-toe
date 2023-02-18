@@ -5,7 +5,7 @@ export default class TicTacToeSolver {
   private readonly loseScore: number;
   private readonly drawScore: number;
   private readonly winScore: number;
-  private simulationTimes: number;
+  private readonly simulationTimes: number;
   private readonly ticTacToe: TicTacToe;
 
   constructor(loseScore: number, drawScore: number, winScore: number, simulationTimes: number, ticTacToe: TicTacToe) {
@@ -28,14 +28,6 @@ export default class TicTacToeSolver {
     }
 
     return moves;
-  }
-
-  public getSimulationTimes(): number {
-    return this.simulationTimes;
-  }
-
-  public setSimulationTimes(simulationTimes: number): void {
-    this.simulationTimes = simulationTimes;
   }
 
   public getBestMove(): number[] {
@@ -86,28 +78,25 @@ export default class TicTacToeSolver {
     const simulatedGame = TicTacToe.clone(this.ticTacToe);
     simulatedGame.input(row, col);
 
-    while (true) {
-      const gameStatus = simulatedGame.getGameStatus();
-
-      if (gameStatus !== GameStatus.IN_PROGRESS) {
-        const winner =
-          gameStatus === GameStatus.X_WINS
-            ? TicTacToeElement.X
-            : gameStatus === GameStatus.O_WINS
-            ? TicTacToeElement.O
-            : null;
-        if (winner === player) {
-          return this.winScore;
-        } else if (winner !== null) {
-          return this.loseScore;
-        } else {
-          return this.drawScore;
-        }
-      }
-
+    while (simulatedGame.getGameStatus() === GameStatus.IN_PROGRESS) {
       const availableMoves = TicTacToeSolver.getAvailableMoves(simulatedGame.getBoard());
       const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
       simulatedGame.input(randomMove[0], randomMove[1]);
+    }
+
+    const gameStatus = simulatedGame.getGameStatus();
+    const winner =
+      gameStatus === GameStatus.X_WINS
+        ? TicTacToeElement.X
+        : gameStatus === GameStatus.O_WINS
+        ? TicTacToeElement.O
+        : null;
+    if (winner === player) {
+      return this.winScore;
+    } else if (winner !== null) {
+      return this.loseScore;
+    } else {
+      return this.drawScore;
     }
   }
 }

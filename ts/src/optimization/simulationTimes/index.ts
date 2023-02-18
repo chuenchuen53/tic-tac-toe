@@ -1,14 +1,16 @@
+import os from "os";
 import fs from "fs";
 import path from "path";
 import Piscina from "piscina";
 import { effectiveCombination } from "../effectiveCombination";
 
+const THREADS = os.cpus().length;
 const FILENAME = "./temp-result/simulation-times.csv";
 
 const piscina = new Piscina({
   filename: path.resolve(__dirname, "worker.js"),
-  minThreads: 10,
-  maxThreads: 10,
+  minThreads: THREADS,
+  maxThreads: THREADS,
 });
 
 const allEffectiveCombination = effectiveCombination();
@@ -21,7 +23,7 @@ async function main() {
     const [loseScore, drawScore, winScore] = generateSet[i];
     console.time(`${loseScore} ${drawScore} ${winScore}`);
 
-    const promise = piscina.run({ loseScore, drawScore, winScore, log: false }).then((simulationTimes: number) => {
+    const promise = piscina.run({ loseScore, drawScore, winScore, log: true }).then((simulationTimes: number) => {
       console.log("result: ", loseScore, drawScore, winScore, simulationTimes);
       console.timeEnd(`${loseScore} ${drawScore} ${winScore}`);
       return [loseScore, drawScore, winScore, simulationTimes];

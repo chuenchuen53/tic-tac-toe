@@ -21,12 +21,12 @@ export default function requiredSimulationTimes(
   const precision = 0.1 * diff * simulationTimes;
 
   const empty = new TicTacToeSolver(loseScore, drawScore, winScore, simulationTimes, new TicTacToe(TicTacToeElement.X));
-  const scoresArr: number[][] = Array.from({ length: 9 }, () => []);
+  const scoresArr: number[][] = Array.from({ length: 9 }, () => Array(sampleSize).fill(0));
   for (let i = 0; i < sampleSize; i++) {
     const arr = empty.calculateScores();
     for (let row = 0; row < TicTacToe.BOARD_SIZE; row++) {
       for (let col = 0; col < TicTacToe.BOARD_SIZE; col++) {
-        scoresArr[row * 3 + col].push(arr[row][col] as number);
+        scoresArr[row * 3 + col][i] = arr[row][col] as number;
       }
     }
   }
@@ -35,13 +35,13 @@ export default function requiredSimulationTimes(
 
   // get required simulate times
   // assume 99.9% confidence interval => z-statistic = 3.29
-  // equation => (z * sampleSd / precision) ** 2
-  const requiredSimulationTimes = meanAndSdArr.map((x) => ((3.29 * x.sd) / precision) ** 2);
-  const result = Math.ceil(Math.max(...requiredSimulationTimes) * simulationTimes);
+  // equation => n = (z * sampleSd / precision) ** 2
+  const n = meanAndSdArr.map((x) => ((3.29 * x.sd) / precision) ** 2);
+  const result = Math.ceil(Math.max(...n) * simulationTimes);
 
   if (log) {
     console.info("meanAndSdArr", meanAndSdArr);
-    console.info("requiredSimulationTimes", requiredSimulationTimes);
+    console.info("n", n);
     console.info("result", result);
   }
 

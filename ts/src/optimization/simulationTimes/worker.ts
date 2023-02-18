@@ -9,14 +9,11 @@ interface WorkerData {
 }
 
 const trails = [
-  { simulationTimes: 1000, sampleSize: 50 },
-  { simulationTimes: 1500, sampleSize: 50 },
-  { simulationTimes: 2000, sampleSize: 50 },
-  // { simulationTimes: 1000, sampleSize: 500 },
-  // { simulationTimes: 1500, sampleSize: 500 },
-  // { simulationTimes: 2000, sampleSize: 500 },
+  { simulationTimes: 7500, sampleSize: 500 },
+  { simulationTimes: 10000, sampleSize: 450 },
+  { simulationTimes: 12500, sampleSize: 400 },
+  { simulationTimes: 15000, sampleSize: 350 },
 ];
-const finalSampleSize = 100;
 
 export default function getRequiredSimulationTimes({ loseScore, drawScore, winScore, log }: WorkerData) {
   console.log("run", loseScore, drawScore, winScore);
@@ -24,27 +21,13 @@ export default function getRequiredSimulationTimes({ loseScore, drawScore, winSc
     requiredSimulationTimes(loseScore, drawScore, winScore, simulationTimes, sampleSize, log)
   );
   const avgResult = resultArr.reduce((acc, cur) => acc + cur, 0) / resultArr.length;
+  const roundedAvgResult = CalcUtil.roundUpToHundred(avgResult);
 
   if (log) {
     console.log("resultArr", resultArr);
     console.log("avgResult", avgResult);
+    console.log("rounded result", roundedAvgResult);
   }
 
-  const finalResult = requiredSimulationTimes(
-    loseScore,
-    drawScore,
-    winScore,
-    Math.min(1000, avgResult),
-    finalSampleSize,
-    log
-  );
-  // const finalResult = requiredSimulationTimes(loseScore, drawScore, winScore, avgResult, finalSampleSize, log);
-  const finalSimulationTimes = CalcUtil.roundUpToHundred(finalResult);
-
-  if (log) {
-    console.log("finalResult", finalResult);
-    console.log("rounded result", finalSimulationTimes);
-  }
-
-  return finalSimulationTimes;
+  return roundedAvgResult;
 }
