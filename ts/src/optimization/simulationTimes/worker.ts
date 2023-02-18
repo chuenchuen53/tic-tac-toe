@@ -1,12 +1,6 @@
 import requiredSimulationTimes from "./requiredSimulationTimes";
 import CalcUtil from "../../util/CalcUtil";
-
-interface WorkerData {
-  loseScore: number;
-  drawScore: number;
-  winScore: number;
-  log?: boolean;
-}
+import type { WorkerData } from "./typing";
 
 const trails = [
   { simulationTimes: 1000, sampleSize: 250 },

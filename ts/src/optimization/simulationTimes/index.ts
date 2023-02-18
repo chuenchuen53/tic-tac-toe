@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import Piscina from "piscina";
 import { effectiveCombination } from "../effectiveCombination";
+import type { WorkerData } from "./typing";
 
 const THREADS = os.cpus().length;
 const FILENAME = "./temp-result/simulation-times.csv";
@@ -23,7 +24,13 @@ async function main() {
     const [loseScore, drawScore, winScore] = generateSet[i];
     console.time(`${loseScore} ${drawScore} ${winScore}`);
 
-    const promise = piscina.run({ loseScore, drawScore, winScore, log: true }).then((simulationTimes: number) => {
+    const workerData: WorkerData = {
+      loseScore,
+      drawScore,
+      winScore,
+      log: true,
+    };
+    const promise = piscina.run(workerData).then((simulationTimes: number) => {
       console.log("result: ", loseScore, drawScore, winScore, simulationTimes);
       console.timeEnd(`${loseScore} ${drawScore} ${winScore}`);
       return [loseScore, drawScore, winScore, simulationTimes];

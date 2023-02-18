@@ -7,10 +7,12 @@
     "build": "tsc",
     "cli": "tsc && node ./build/game-in-cli",
     "server": "tsc && node ./build/server",
-    "op-st": "tsc && node ./build/optimization/simulationTimes"
+    "op-st": "tsc && node ./build/optimization/simulationTimes",
+    "op-gp": "tsc && node ./build/optimization/scores"
   },
   "dependencies": {
     "cors": "2.8.5",
+    "csv-parse": "5.3.5",
     "express": "4.18.2",
     "piscina": "3.2.0",
     "ts-node": "10.9.1",
