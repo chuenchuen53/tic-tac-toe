@@ -20,13 +20,14 @@ export const effectiveCombination: () => number[][] = () => {
   // 2. loseScore, drawScore, winScore have common factor
   const rawProduct = cartesianProduct();
   const first = rawProduct.filter(([_lose, draw, win]) => win > draw);
-  const second = first.filter(([a, b, c]) => {
-    const min = Math.min(Math.abs(a), Math.abs(b), Math.abs(c));
+  const second = first.filter((arr) => {
+    const [a, b, c] = arr.map(Math.abs);
+    const min = Math.min(a, b, c);
     for (let factor = 2; factor <= min; factor++) {
-      if (a % factor === 0 && b % factor === 0 && c % factor === 0) return true;
+      if (a % factor === 0 && b % factor === 0 && c % factor === 0) return false;
     }
 
-    return false;
+    return true;
   });
   return second;
 };

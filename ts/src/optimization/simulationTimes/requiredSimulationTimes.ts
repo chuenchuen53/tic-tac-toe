@@ -11,9 +11,9 @@ export default function requiredSimulationTimes(
   sampleSize: number,
   log = false
 ): number {
-  const diff = Math.min(
+  const diff = Math.max(
     1,
-    Math.max(
+    Math.min(
       Math.abs(Math.abs(loseScore) - drawScore), // for-prettier
       winScore - drawScore
     )
@@ -40,9 +40,9 @@ export default function requiredSimulationTimes(
   const result = Math.ceil(Math.max(...n) * simulationTimes);
 
   if (log) {
-    console.info("meanAndSdArr", meanAndSdArr);
-    console.info("n", n);
-    console.info("result", result);
+    console.log("meanAndSdArr", meanAndSdArr);
+    console.log("n", n);
+    console.log("result", result);
   }
 
   return result;

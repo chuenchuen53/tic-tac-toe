@@ -9,10 +9,8 @@ interface WorkerData {
 }
 
 const trails = [
-  { simulationTimes: 7500, sampleSize: 500 },
-  { simulationTimes: 10000, sampleSize: 450 },
-  { simulationTimes: 12500, sampleSize: 400 },
-  { simulationTimes: 15000, sampleSize: 350 },
+  { simulationTimes: 1000, sampleSize: 250 },
+  { simulationTimes: 1500, sampleSize: 200 },
 ];
 
 export default function getRequiredSimulationTimes({ loseScore, drawScore, winScore, log }: WorkerData) {

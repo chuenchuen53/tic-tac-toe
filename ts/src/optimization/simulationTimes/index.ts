@@ -14,7 +14,7 @@ const piscina = new Piscina({
 });
 
 const allEffectiveCombination = effectiveCombination();
-const generateSet = allEffectiveCombination.slice(0, 555);
+const generateSet = allEffectiveCombination.slice(0, 3245);
 
 async function main() {
   const promiseArr: Promise<number[]>[] = [];
