@@ -1,6 +1,6 @@
 import { scanner } from "./Scanner";
-import { TicTacToe } from "./TicTacToe";
-import { TicTacToeElement, GameStatus } from "./typing";
+import TicTacToe from "../TicTacToe";
+import { TicTacToeElement, GameStatus } from "../typing";
 
 export class TicTacToeCli extends TicTacToe {
   constructor(turn: TicTacToeElement) {

@@ -1,6 +1,8 @@
 import { GameStatus, TicTacToeElement } from "./typing";
 
-export class TicTacToe {
+export default class TicTacToe {
+  public static readonly BOARD_SIZE = 3;
+
   private readonly LINES_INDEXES: number[][][] = [
     [
       [0, 0],
@@ -54,6 +56,13 @@ export class TicTacToe {
   constructor(turn: TicTacToeElement) {
     this.startTurn = turn;
     this.turn = turn;
+  }
+
+  static clone(ticTacToe: TicTacToe): TicTacToe {
+    const clone = new TicTacToe(ticTacToe.getStartTurn());
+    clone.board = ticTacToe.getBoard();
+    clone.turn = ticTacToe.getTurn();
+    return clone;
   }
 
   public getBoard(): (TicTacToeElement | null)[][] {

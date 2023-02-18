@@ -1,6 +1,6 @@
 import { scanner } from "./Scanner";
 import { TicTacToeCli } from "./TicTacToeCli";
-import { TicTacToeElement } from "./typing";
+import { TicTacToeElement } from "../typing";
 
 class Main {
   static game: TicTacToeCli = new TicTacToeCli(TicTacToeElement.X);

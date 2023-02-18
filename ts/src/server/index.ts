@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
 import { Request, Response } from "express";
-import { InputRequest } from "./api-typing";
-import { TicTacToe } from "./TicTacToe";
-import { TicTacToeElement } from "./typing";
+import { InputRequest } from "../api-typing";
+import TicTacToe from "../TicTacToe";
+import { TicTacToeElement } from "../typing";
 
 const PORT = 8080;
 const CORS_OPTIONS = Object.freeze({
