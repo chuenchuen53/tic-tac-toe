@@ -1,42 +1,24 @@
+import fs from "fs";
 import path from "path";
 import Piscina from "piscina";
+import { effectiveCombination } from "../effectiveCombination";
+
+const FILENAME = "./temp-result/simulation-times.csv";
 
 const piscina = new Piscina({
   filename: path.resolve(__dirname, "worker.js"),
+  minThreads: 10,
+  maxThreads: 10,
 });
 
-const testSet = [
-  [-10, 12, 20],
-  [-18, 8, 16],
-  [-16, 8, 14],
-  [-12, 14, 20],
-  [-16, 4, 12],
-  [-2, 14, 18],
-  [-18, 4, 20],
-  [-8, 6, 20],
-  [-12, 4, 8],
-  [-3, 15, 18],
-  [-2, 4, 12],
-  [-16, 16, 20],
-  [-8, 2, 20],
-  [-8, 16, 18],
-  [-6, 9, 15],
-  [-10, 5, 20],
-  [-4, 4, 14],
-  [-20, 12, 16],
-  [-18, 10, 16],
-  [-12, 8, 16],
-  [-18, 12, 15],
-  [-12, 14, 20],
-  [-16, 8, 20],
-  [-2, 10, 18],
-];
+const allEffectiveCombination = effectiveCombination();
+const generateSet = allEffectiveCombination.slice(0, 555);
 
 async function main() {
   const promiseArr: Promise<number[]>[] = [];
 
-  for (let i = 0; i < testSet.length; i++) {
-    const [loseScore, drawScore, winScore] = testSet[i];
+  for (let i = 0; i < generateSet.length; i++) {
+    const [loseScore, drawScore, winScore] = generateSet[i];
     console.time(`${loseScore} ${drawScore} ${winScore}`);
 
     const promise = piscina.run({ loseScore, drawScore, winScore, log: false }).then((simulationTimes: number) => {
@@ -49,6 +31,16 @@ async function main() {
 
   const result = await Promise.all(promiseArr);
   console.log("result: ", result);
+
+  saveToCSV(result, FILENAME);
+}
+
+function saveToCSV(data: number[][], fileName: string) {
+  const header = "loseScore,drawScore,winScore,simulationTimes\n";
+  let csv = header;
+  data.forEach((row) => (csv += row.join(",") + "\n"));
+  fs.writeFileSync(fileName, csv);
+  console.log(`Result saved to ${fileName}`);
 }
 
 main();

@@ -19,9 +19,7 @@ export const effectiveCombination: () => number[][] = () => {
   // 1. winScore <= drawScore
   // 2. loseScore, drawScore, winScore have common factor
   const rawProduct = cartesianProduct();
-  console.log("rawProduct.length: ", rawProduct.length);
   const first = rawProduct.filter(([_lose, draw, win]) => win > draw);
-  console.log("first.length: ", first.length);
   const second = first.filter(([a, b, c]) => {
     const min = Math.min(Math.abs(a), Math.abs(b), Math.abs(c));
     for (let factor = 2; factor <= min; factor++) {
@@ -30,6 +28,5 @@ export const effectiveCombination: () => number[][] = () => {
 
     return false;
   });
-  console.log("second.length: ", second.length);
   return second;
 };
