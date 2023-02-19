@@ -1,4 +1,4 @@
-import { botResultPercent } from "./botResultPercent";
+import { botResult } from "./botResult";
 import type { ResultRow, WorkerData } from "./typing";
 
 const SAMPLE_SIZE = 1000;
@@ -11,8 +11,9 @@ export default function getBotResultPercent({
   log,
 }: WorkerData): ResultRow {
   console.log("run", loseScore, drawScore, winScore);
-  const result = botResultPercent({ loseScore, drawScore, winScore, simulationTimes }, SAMPLE_SIZE);
+  const result = botResult({ loseScore, drawScore, winScore, simulationTimes }, SAMPLE_SIZE);
   const resultRow: ResultRow = {
+    sampleSize: SAMPLE_SIZE,
     loseScore,
     drawScore,
     winScore,
@@ -23,9 +24,6 @@ export default function getBotResultPercent({
     startSecond_lose: result.startSecond.lose,
     startSecond_draw: result.startSecond.draw,
     startSecond_win: result.startSecond.win,
-    overall_lose: result.overall.lose,
-    overall_draw: result.overall.draw,
-    overall_win: result.overall.win,
   };
   if (log) {
     console.log("resultRow", resultRow);

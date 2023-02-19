@@ -1,14 +1,14 @@
 import TicTacToe from "../../TicTacToe";
 import TicTacToeSolver from "../../TicTacToeSolver";
 import { TicTacToeElement, GameStatus } from "../../typing";
-import { BotResult, BotResultCount, BotResultPercent, SolverData } from "./typing";
+import { BotResult, BotResultCount, BotResultData, SolverData } from "./typing";
 
 const BOT = TicTacToeElement.X;
 const BOT_WINS = GameStatus.X_WINS;
 const OPPONENT = TicTacToeElement.O;
 const OPPONENT_WINS = GameStatus.O_WINS;
 
-export function botResultPercent(solverData: SolverData, sampleSize: number): BotResultPercent {
+export function botResult(solverData: SolverData, sampleSize: number): BotResultData {
   const { loseScore, drawScore, winScore, simulationTimes } = solverData;
   let botStartFirst: BotResultCount = {
     win: 0,
@@ -31,27 +31,21 @@ export function botResultPercent(solverData: SolverData, sampleSize: number): Bo
   }
 
   const startFirst = {
-    win: botStartFirst.win / sampleSize,
-    lose: botStartFirst.lose / sampleSize,
-    draw: botStartFirst.draw / sampleSize,
+    win: botStartFirst.win,
+    lose: botStartFirst.lose,
+    draw: botStartFirst.draw,
   };
 
   const startSecond = {
-    win: botStartSecond.win / sampleSize,
-    lose: botStartSecond.lose / sampleSize,
-    draw: botStartSecond.draw / sampleSize,
-  };
-
-  const overall = {
-    win: (botStartFirst.win + botStartSecond.win) / (sampleSize * 2),
-    lose: (botStartFirst.lose + botStartSecond.lose) / (sampleSize * 2),
-    draw: (botStartFirst.draw + botStartSecond.draw) / (sampleSize * 2),
+    win: botStartSecond.win,
+    lose: botStartSecond.lose,
+    draw: botStartSecond.draw,
   };
 
   return {
+    sampleSize,
     startFirst,
     startSecond,
-    overall,
   };
 }
 
