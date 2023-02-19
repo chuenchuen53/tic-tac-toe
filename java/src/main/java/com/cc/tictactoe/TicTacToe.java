@@ -1,9 +1,14 @@
 package com.cc.tictactoe;
 
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class TicTacToe {
+    public static final int BOARD_SIZE = 3;
     private final int[][][] LINES_INDEXES = {
             {{0, 0}, {0, 1}, {0, 2}},
             {{1, 0}, {1, 1}, {1, 2}},
@@ -15,12 +20,21 @@ public class TicTacToe {
             {{0, 2}, {1, 1}, {2, 0}}
     };
     private final TicTacToeElement[][] board = new TicTacToeElement[3][3];
-    private final TicTacToeElement startTurn;
+    private TicTacToeElement startTurn;
     private TicTacToeElement turn;
 
     public TicTacToe(TicTacToeElement turn) {
         this.startTurn = turn;
         this.turn = turn;
+    }
+
+    public static TicTacToe clone(TicTacToe ticTacToe) {
+        TicTacToe clone = new TicTacToe(ticTacToe.getStartTurn());
+        for (int i = 0; i < ticTacToe.board.length; i++) {
+            System.arraycopy(ticTacToe.board[i], 0, clone.board[i], 0, ticTacToe.board[i].length);
+        }
+        clone.turn = ticTacToe.getTurn();
+        return clone;
     }
 
     public TicTacToeElement[][] getBoard() {
@@ -49,6 +63,7 @@ public class TicTacToe {
     }
 
     public void resetBoard(TicTacToeElement turn) {
+        startTurn = turn;
         this.turn = turn;
         for (TicTacToeElement[] row : board) {
             Arrays.fill(row, null);
@@ -66,11 +81,23 @@ public class TicTacToe {
         return GameStatus.IN_PROGRESS;
     }
 
+    public List<int[]> getAvailableMoves() {
+        List<int[]> availableMove = new ArrayList<>();
+        for (int i = 0; i < TicTacToe.BOARD_SIZE; i++) {
+            for (int j = 0; j < TicTacToe.BOARD_SIZE; j++) {
+                if (board[i][j] == null) {
+                    availableMove.add(new int[]{i, j});
+                }
+            }
+        }
+        return availableMove;
+    }
+
     private boolean allFilled() {
         return Arrays.stream(board).flatMap(Arrays::stream).allMatch(Objects::nonNull);
     }
 
-    private TicTacToeElement checkWinner() {
+    private @Nullable TicTacToeElement checkWinner() {
         for (int[][] x : LINES_INDEXES) {
             TicTacToeElement[] cells = {board[x[0][0]][x[0][1]], board[x[1][0]][x[1][1]], board[x[2][0]][x[2][1]]};
             if (Arrays.stream(cells).takeWhile(Objects::nonNull).count() == 3 && Arrays.stream(cells).distinct().count() == 1) {
