@@ -87,6 +87,7 @@ export default class TicTacToe {
   }
 
   public resetBoard(turn: TicTacToeElement): void {
+    this.startTurn = turn;
     this.turn = turn;
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
@@ -104,6 +105,18 @@ export default class TicTacToe {
       return GameStatus.DRAW;
     }
     return GameStatus.IN_PROGRESS;
+  }
+
+  public getAvailableMoves(): number[][] {
+    const availableMoves: number[][] = [];
+    for (let i = 0; i < TicTacToe.BOARD_SIZE; i++) {
+      for (let j = 0; j < TicTacToe.BOARD_SIZE; j++) {
+        if (this.board[i][j] === null) {
+          availableMoves.push([i, j]);
+        }
+      }
+    }
+    return availableMoves;
   }
 
   private allFilled(): boolean {

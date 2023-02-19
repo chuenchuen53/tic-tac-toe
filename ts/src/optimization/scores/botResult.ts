@@ -21,13 +21,20 @@ export function botResult(solverData: SolverData, sampleSize: number): BotResult
     draw: 0,
   };
 
+  const ticTacToeBotFirst = new TicTacToe(BOT);
+  const solverBotFirst = new TicTacToeSolver(loseScore, drawScore, winScore, simulationTimes, ticTacToeBotFirst);
   for (let i = 0; i < sampleSize; i++) {
-    const result = resultWithBotStartFirst(loseScore, drawScore, winScore, simulationTimes);
+    const result = resultWithBotStartFirst(solverBotFirst);
     botStartFirst[result]++;
+    ticTacToeBotFirst.resetBoard(BOT);
   }
+
+  const ticTacToeBotSecond = new TicTacToe(OPPONENT);
+  const solverBotSecond = new TicTacToeSolver(loseScore, drawScore, winScore, simulationTimes, ticTacToeBotSecond);
   for (let i = 0; i < sampleSize; i++) {
-    const result = resultWithBotStartSecond(loseScore, drawScore, winScore, simulationTimes);
+    const result = resultWithBotStartSecond(solverBotSecond);
     botStartSecond[result]++;
+    ticTacToeBotSecond.resetBoard(OPPONENT);
   }
 
   const startFirst = {
@@ -49,14 +56,8 @@ export function botResult(solverData: SolverData, sampleSize: number): BotResult
   };
 }
 
-function resultWithBotStartFirst(
-  loseScore: number,
-  drawScore: number,
-  winScore: number,
-  simulationTimes: number
-): BotResult {
-  const ticTacToe = new TicTacToe(BOT);
-  const solver = new TicTacToeSolver(loseScore, drawScore, winScore, simulationTimes, ticTacToe);
+function resultWithBotStartFirst(solver: TicTacToeSolver): BotResult {
+  const ticTacToe = solver.getTicTacToe();
   let gameStatus = ticTacToe.getGameStatus();
   while (gameStatus === GameStatus.IN_PROGRESS) {
     const [row, col] = solver.getBestMove();
@@ -64,8 +65,7 @@ function resultWithBotStartFirst(
     gameStatus = ticTacToe.getGameStatus();
 
     if (gameStatus === GameStatus.IN_PROGRESS) {
-      const availableMoves = TicTacToeSolver.getAvailableMoves(ticTacToe.getBoard());
-      const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+      const randomMove = solver.getRandomMove();
       ticTacToe.input(randomMove[0], randomMove[1]);
       gameStatus = ticTacToe.getGameStatus();
     }
@@ -74,18 +74,11 @@ function resultWithBotStartFirst(
   return getBotResultFromGameStatus(gameStatus);
 }
 
-function resultWithBotStartSecond(
-  loseScore: number,
-  drawScore: number,
-  winScore: number,
-  simulationTimes: number
-): BotResult {
-  const ticTacToe = new TicTacToe(OPPONENT);
-  const solver = new TicTacToeSolver(loseScore, drawScore, winScore, simulationTimes, ticTacToe);
+function resultWithBotStartSecond(solver: TicTacToeSolver): BotResult {
+  const ticTacToe = solver.getTicTacToe();
   let gameStatus = ticTacToe.getGameStatus();
   while (gameStatus === GameStatus.IN_PROGRESS) {
-    const availableMoves = TicTacToeSolver.getAvailableMoves(ticTacToe.getBoard());
-    const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+    const randomMove = solver.getRandomMove();
     ticTacToe.input(randomMove[0], randomMove[1]);
     gameStatus = ticTacToe.getGameStatus();
 

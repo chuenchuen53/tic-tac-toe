@@ -8,7 +8,7 @@ import type { WorkerData, ResultRow, SolverData } from "./typing";
 import { solverDataFromCsv } from "./solverDataFromCsv";
 
 const THREADS = os.cpus().length;
-const FILENAME = "./temp-result/percent.csv";
+const FILENAME = "./temp-result/scores.csv";
 
 let testCollection: Collection;
 let scoresCollection: Collection;
@@ -24,8 +24,11 @@ async function run() {
   testCollection = ticTacToeDb.collections.testCollection;
   scoresCollection = ticTacToeDb.collections.scores;
 
-  await main();
+  if (!Math.random()) {
+    console.log(testCollection);
+  }
 
+  await main();
   ticTacToeDb.client.close();
 }
 
@@ -46,10 +49,10 @@ async function main() {
       simulationTimes,
       log: true,
     };
-    const promise = piscina.run(workerData).then((percent: ResultRow) => {
+    const promise = piscina.run(workerData).then(async (result: ResultRow) => {
       console.timeEnd(`${loseScore} ${drawScore} ${winScore}`);
-      scoresCollection.insertOne(percent);
-      return percent;
+      await scoresCollection.insertOne(result);
+      return result;
     });
     promiseArr.push(promise);
   }

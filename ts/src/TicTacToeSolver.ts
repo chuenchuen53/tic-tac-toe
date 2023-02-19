@@ -16,18 +16,13 @@ export default class TicTacToeSolver {
     this.ticTacToe = ticTacToe;
   }
 
-  static getAvailableMoves(board: (TicTacToeElement | null)[][]): number[][] {
-    const moves: number[][] = [];
+  public getTicTacToe(): TicTacToe {
+    return this.ticTacToe;
+  }
 
-    for (let row = 0; row < TicTacToe.BOARD_SIZE; row++) {
-      for (let col = 0; col < TicTacToe.BOARD_SIZE; col++) {
-        if (board[row][col] === null) {
-          moves.push([row, col]);
-        }
-      }
-    }
-
-    return moves;
+  public getRandomMove(): number[] {
+    const availableMoves = this.ticTacToe.getAvailableMoves();
+    return availableMoves[Math.floor(Math.random() * availableMoves.length)];
   }
 
   public getBestMove(): number[] {
@@ -79,7 +74,7 @@ export default class TicTacToeSolver {
     simulatedGame.input(row, col);
 
     while (simulatedGame.getGameStatus() === GameStatus.IN_PROGRESS) {
-      const availableMoves = TicTacToeSolver.getAvailableMoves(simulatedGame.getBoard());
+      const availableMoves = simulatedGame.getAvailableMoves();
       const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
       simulatedGame.input(randomMove[0], randomMove[1]);
     }
