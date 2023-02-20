@@ -8,7 +8,7 @@ export class TicTacToeCli extends TicTacToe {
   }
 
   public printBoard(): void {
-    const board: (TicTacToeElement | null)[][] = this.getBoard();
+    const board = this.getBoard();
     const rowSeparator = "--+---+--";
     for (let i = 0; i < board.length; i++) {
       let row: string = "";

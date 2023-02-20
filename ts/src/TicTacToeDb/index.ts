@@ -10,6 +10,7 @@ if (!DB_NAME) throw new Error("DB_NAME is not set in env");
 interface MyCollections {
   testCollection: mongoDB.Collection;
   scores: mongoDB.Collection;
+  simulationTimes: mongoDB.Collection;
 }
 
 class TicTacToeDb {
@@ -36,7 +37,8 @@ class TicTacToeDb {
     this.db = this.client.db(TicTacToeDb.DB_NAME);
     this.collections = {
       testCollection: this.db.collection("testCollection"),
-      scores: this.db.collection("score"),
+      scores: this.db.collection("scores"),
+      simulationTimes: this.db.collection("simulationTimes"),
     };
 
     console.log(`Successfully connected to database: ${this.db.databaseName}`);

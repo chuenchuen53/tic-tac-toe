@@ -1,49 +1,126 @@
 import CalcUtil from "../../util/CalcUtil";
 import TicTacToeSolver from "../../TicTacToeSolver";
-import TicTacToe from "../../TicTacToe";
-import { TicTacToeElement } from "../../typing";
+import { SimulationResult } from "../../typing";
+import { SimulationCase } from "./constant";
+import { getTicTacToe } from "./boardConfiguration";
+import { WorkerResult } from "./typing";
+
+const dummyScores = {
+  lose: -10,
+  draw: 8,
+  win: 10,
+};
 
 export default function requiredSimulationTimes(
-  loseScore: number,
-  drawScore: number,
-  winScore: number,
-  simulationTimes: number,
+  simulationCase: SimulationCase,
   sampleSize: number,
+  simulationTimes: number,
+  precision: number,
   log = false
-): number {
-  const diff = Math.max(
-    1,
-    Math.min(
-      Math.abs(Math.abs(loseScore) - drawScore), // for-prettier
-      winScore - drawScore
-    )
+): WorkerResult {
+  const allResult: SimulationResult[] = [];
+  const ticTacToe = getTicTacToe(simulationCase);
+  const ticTacToeSolver = new TicTacToeSolver(
+    dummyScores.lose,
+    dummyScores.draw,
+    dummyScores.win,
+    simulationTimes,
+    ticTacToe
   );
-  const precision = 0.1 * diff * simulationTimes;
-
-  const empty = new TicTacToeSolver(loseScore, drawScore, winScore, simulationTimes, new TicTacToe(TicTacToeElement.X));
-  const scoresArr: number[][] = Array.from({ length: 9 }, () => Array(sampleSize).fill(0));
   for (let i = 0; i < sampleSize; i++) {
-    const arr = empty.calculateScores();
-    for (let row = 0; row < TicTacToe.BOARD_SIZE; row++) {
-      for (let col = 0; col < TicTacToe.BOARD_SIZE; col++) {
-        scoresArr[row * 3 + col][i] = arr[row][col] as number;
+    const result = ticTacToeSolver.getSimulationResult();
+    allResult.push(result);
+  }
+
+  const ratioArr = [
+    [countTemplate(), countTemplate(), countTemplate()],
+    [countTemplate(), countTemplate(), countTemplate()],
+    [countTemplate(), countTemplate(), countTemplate()],
+  ];
+
+  for (const result of allResult) {
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        const gameResultCount = result[i][j];
+        if (gameResultCount === null) continue;
+        ratioArr[i][j].lose.push(gameResultCount.lose / simulationTimes);
+        ratioArr[i][j].draw.push(gameResultCount.draw / simulationTimes);
+        ratioArr[i][j].win.push(gameResultCount.win / simulationTimes);
       }
     }
   }
 
-  const meanAndSdArr = scoresArr.map((scores) => CalcUtil.meanAndSD(scores));
+  const meanAndSdArr = ratioArr.map((row) =>
+    row.map((cell) =>
+      cell.lose.length === 0
+        ? null
+        : {
+            lose: CalcUtil.meanAndSD(cell.lose),
+            draw: CalcUtil.meanAndSD(cell.draw),
+            win: CalcUtil.meanAndSD(cell.win),
+          }
+    )
+  );
 
-  // get required simulate times
-  // assume 99.9% confidence interval => z-statistic = 3.29
-  // equation => n = (z * sampleSd / precision) ** 2
-  const n = meanAndSdArr.map((x) => ((3.29 * x.sd) / precision) ** 2);
-  const result = Math.ceil(Math.max(...n) * simulationTimes);
+  const NValues = {
+    lose: meanAndSdArr.map((row) => row.map((cell) => (cell === null ? null : getN(cell.lose, precision)))),
+    draw: meanAndSdArr.map((row) => row.map((cell) => (cell === null ? null : getN(cell.draw, precision)))),
+    win: meanAndSdArr.map((row) => row.map((cell) => (cell === null ? null : getN(cell.win, precision)))),
+  };
+
+  const maxN = Math.max(
+    ...NValues.lose.map((row) => Math.max(...row.map((cell) => cell ?? 0))),
+    ...NValues.draw.map((row) => Math.max(...row.map((cell) => cell ?? 0))),
+    ...NValues.win.map((row) => Math.max(...row.map((cell) => cell ?? 0)))
+  );
+
+  const result = simulationTimes * maxN;
 
   if (log) {
-    console.log("meanAndSdArr", meanAndSdArr);
-    console.log("n", n);
+    console.log("simulationCase", simulationCase);
+    console.log(
+      "mean",
+      meanAndSdArr.map((x) =>
+        x.map((y) =>
+          y ? `{lose: ${y.lose.mean.toFixed(2)}, draw: ${y.draw.mean.toFixed(2)}, win: ${y.win.mean.toFixed(2)}}` : null
+        )
+      )
+    );
+    console.log(
+      "sd",
+      meanAndSdArr.map((x) =>
+        x.map((y) =>
+          y ? `{lose: ${y.lose.sd.toFixed(2)}, draw: ${y.draw.sd.toFixed(2)}, win: ${y.win.sd.toFixed(2)}}` : null
+        )
+      )
+    );
+    console.log("NValues", NValues);
     console.log("result", result);
   }
 
-  return result;
+  return {
+    simulationCase,
+    sampleSize,
+    simulationTimes,
+    precision,
+    allResult,
+    requiredSimulations: result,
+  };
+}
+
+function getN(x: { sd: number }, precision: number): number {
+  // get required simulate times
+  // assume 99.9% confidence interval => z-statistic = 3.29
+  // assume 99% confidence interval => z-statistic = 2.58
+  // assume 95% confidence interval => z-statistic = 1.96
+  // equation => n = (z * sampleSd / precision) ** 2
+  return ((2.58 * x.sd) / precision) ** 2;
+}
+
+function countTemplate() {
+  return {
+    lose: [] as number[],
+    draw: [] as number[],
+    win: [] as number[],
+  };
 }

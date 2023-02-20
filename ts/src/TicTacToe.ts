@@ -59,13 +59,29 @@ export default class TicTacToe {
   }
 
   static clone(ticTacToe: TicTacToe): TicTacToe {
-    const clone = new TicTacToe(ticTacToe.getStartTurn());
-    clone.board = ticTacToe.getBoard();
+    const clone = new TicTacToe(ticTacToe.startTurn);
+    clone.board = ticTacToe.getClonedBoard();
     clone.turn = ticTacToe.getTurn();
     return clone;
   }
 
-  public getBoard(): (TicTacToeElement | null)[][] {
+  static winnerFromGameStatus(gameStatus: GameStatus): TicTacToeElement | null {
+    switch (gameStatus) {
+      case GameStatus.X_WINS:
+        return TicTacToeElement.X;
+      case GameStatus.O_WINS:
+        return TicTacToeElement.O;
+      default:
+        return null;
+    }
+  }
+
+  // Readonly only prevent modification of the board in compile time (not runtime)
+  public getBoard(): Readonly<Readonly<(TicTacToeElement | null)[]>[]> {
+    return this.board;
+  }
+
+  public getClonedBoard(): (TicTacToeElement | null)[][] {
     return this.board.map((row) => [...row]);
   }
 
@@ -89,8 +105,8 @@ export default class TicTacToe {
   public resetBoard(turn: TicTacToeElement): void {
     this.startTurn = turn;
     this.turn = turn;
-    for (let i = 0; i < this.board.length; i++) {
-      for (let j = 0; j < this.board[i].length; j++) {
+    for (let i = 0; i < TicTacToe.BOARD_SIZE; i++) {
+      for (let j = 0; j < TicTacToe.BOARD_SIZE; j++) {
         this.board[i][j] = null;
       }
     }

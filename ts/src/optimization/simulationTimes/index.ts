@@ -1,12 +1,24 @@
 import os from "os";
-import fs from "fs";
 import path from "path";
 import Piscina from "piscina";
-import { effectiveCombination } from "../effectiveCombination";
-import type { WorkerData } from "./typing";
+import { SIMULATION_CASES } from "./constant";
+import { setting } from "./setting";
+import ticTacToeDb from "../../TicTacToeDb";
+import type { CsvData, DbRow, WorkerData, WorkerResult } from "./typing";
+import { saveToCSV } from "../saveToCsv";
+import { getIsTestingDb } from "../getIsTestingDb";
 
 const THREADS = os.cpus().length;
-const FILENAME = "./temp-result/simulation-times.csv";
+const FILENAME = "temp-result/simulation-times-result.csv";
+const CSV_HEADER = [
+  "simulationCase",
+  "sampleSize",
+  "simulationTimes",
+  "precision",
+  "requiredSimulations",
+] satisfies (keyof CsvData[number])[];
+
+const isTestingDB = getIsTestingDb();
 
 const piscina = new Piscina({
   filename: path.resolve(__dirname, "worker.js"),
@@ -14,42 +26,45 @@ const piscina = new Piscina({
   maxThreads: THREADS,
 });
 
-const allEffectiveCombination = effectiveCombination();
-const generateSet = allEffectiveCombination.slice(0, 3245);
-
 async function main() {
-  const promiseArr: Promise<number[]>[] = [];
+  await ticTacToeDb.connectToDatabase();
 
-  for (let i = 0; i < generateSet.length; i++) {
-    const [loseScore, drawScore, winScore] = generateSet[i];
-    console.time(`${loseScore} ${drawScore} ${winScore}`);
-
+  const promiseArr: Promise<WorkerResult>[] = [];
+  for (let simulationCase of SIMULATION_CASES) {
     const workerData: WorkerData = {
-      loseScore,
-      drawScore,
-      winScore,
-      log: true,
+      simulationCase,
+      sampleSize: setting.sampleSize,
+      simulationTimes: setting.simulationTimes,
+      precision: setting.precision,
+      logResult: true,
     };
-    const promise = piscina.run(workerData).then((simulationTimes: number) => {
-      console.log("result: ", loseScore, drawScore, winScore, simulationTimes);
-      console.timeEnd(`${loseScore} ${drawScore} ${winScore}`);
-      return [loseScore, drawScore, winScore, simulationTimes];
+    const promise = piscina.run(workerData).then(async (workerResult: WorkerResult) => {
+      const dbRow: DbRow = { ...workerResult, createdAt: new Date() };
+
+      if (isTestingDB) {
+        await ticTacToeDb.collections.testCollection.insertOne(dbRow);
+      } else {
+        await ticTacToeDb.collections.simulationTimes.insertOne(dbRow);
+      }
+      return workerResult;
     });
     promiseArr.push(promise);
   }
 
   const result = await Promise.all(promiseArr);
-  console.log("result: ", result);
+  const csvData: CsvData = result.map((row) => ({
+    simulationCase: row.simulationCase,
+    sampleSize: row.sampleSize,
+    simulationTimes: row.simulationTimes,
+    precision: row.precision,
+    requiredSimulations: row.requiredSimulations,
+  }));
+  saveToCSV(csvData, CSV_HEADER, FILENAME);
 
-  saveToCSV(result, FILENAME);
+  ticTacToeDb.client.close();
 }
 
-function saveToCSV(data: number[][], fileName: string) {
-  const header = "loseScore,drawScore,winScore,simulationTimes\n";
-  let csv = header;
-  data.forEach((row) => (csv += row.join(",") + "\n"));
-  fs.writeFileSync(fileName, csv);
-  console.log(`Result saved to ${fileName}`);
-}
-
+console.log(new Date(), "start main()");
+console.time("main");
 main();
+console.timeEnd("main");

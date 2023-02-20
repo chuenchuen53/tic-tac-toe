@@ -1,5 +1,5 @@
 import TicTacToe from "./TicTacToe";
-import { TicTacToeElement, GameStatus } from "./typing";
+import { GameStatus, GameResult, SimulationResult, GameResultCount } from "./typing";
 
 export default class TicTacToeSolver {
   private readonly loseScore: number;
@@ -47,28 +47,56 @@ export default class TicTacToeSolver {
   }
 
   public calculateScores(): (number | null)[][] {
-    const scores: (number | null)[][] = [];
-    const board = this.ticTacToe.getBoard();
+    const scores: (number | null)[][] = [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null],
+    ];
 
+    const simulationResult = this.getSimulationResult();
     for (let row = 0; row < TicTacToe.BOARD_SIZE; row++) {
-      scores[row] = [];
       for (let col = 0; col < TicTacToe.BOARD_SIZE; col++) {
-        if (board[row][col] !== null) {
-          scores[row][col] = null;
-        } else {
-          let score = 0;
-          for (let i = 0; i < this.simulationTimes; i++) {
-            score += this.simulateGame(row, col);
-          }
-          scores[row][col] = score;
-        }
+        const gameResultCount = simulationResult[row][col];
+        if (gameResultCount === null) continue;
+        scores[row][col] =
+          gameResultCount.win * this.winScore +
+          gameResultCount.draw * this.drawScore +
+          gameResultCount.lose * this.loseScore;
       }
     }
 
     return scores;
   }
 
-  private simulateGame(row: number, col: number): number {
+  public getSimulationResult(): SimulationResult {
+    const result: SimulationResult = [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null],
+    ];
+    const board = this.ticTacToe.getBoard();
+
+    for (let row = 0; row < TicTacToe.BOARD_SIZE; row++) {
+      for (let col = 0; col < TicTacToe.BOARD_SIZE; col++) {
+        if (board[row][col] === null) {
+          const gameResultCount: GameResultCount = {
+            lose: 0,
+            draw: 0,
+            win: 0,
+          };
+          for (let i = 0; i < this.simulationTimes; i++) {
+            const gameResult = this.simulateGame(row, col);
+            gameResultCount[gameResult]++;
+          }
+          result[row][col] = gameResultCount;
+        }
+      }
+    }
+
+    return result;
+  }
+
+  private simulateGame(row: number, col: number): GameResult {
     const player = this.ticTacToe.getTurn();
     const simulatedGame = TicTacToe.clone(this.ticTacToe);
     simulatedGame.input(row, col);
@@ -80,18 +108,14 @@ export default class TicTacToeSolver {
     }
 
     const gameStatus = simulatedGame.getGameStatus();
-    const winner =
-      gameStatus === GameStatus.X_WINS
-        ? TicTacToeElement.X
-        : gameStatus === GameStatus.O_WINS
-        ? TicTacToeElement.O
-        : null;
-    if (winner === player) {
-      return this.winScore;
-    } else if (winner !== null) {
-      return this.loseScore;
+    const winner = TicTacToe.winnerFromGameStatus(gameStatus);
+
+    if (winner === null) {
+      return "draw";
+    } else if (winner === player) {
+      return "win";
     } else {
-      return this.drawScore;
+      return "lose";
     }
   }
 }
