@@ -37,6 +37,10 @@ public class TicTacToe {
         return clone;
     }
 
+    public static TicTacToeElement getOpponent(TicTacToeElement player) {
+        return player == TicTacToeElement.X ? TicTacToeElement.O : TicTacToeElement.X;
+    }
+
     public TicTacToeElement[][] getBoard() {
         TicTacToeElement[][] copy = new TicTacToeElement[3][3];
         for (int i = 0; i < board.length; i++) {
