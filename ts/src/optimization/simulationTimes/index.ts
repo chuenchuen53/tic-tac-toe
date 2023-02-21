@@ -1,12 +1,15 @@
 import os from "os";
 import path from "path";
 import Piscina from "piscina";
-import { SIMULATION_CASES } from "./constant";
+import { SIMULATION_CASES } from "../constant";
 import { setting } from "./setting";
 import ticTacToeDb from "../../TicTacToeDb";
 import type { CsvData, DbRow, WorkerData, WorkerResult } from "./typing";
 import { saveToCSV } from "../saveToCsv";
 import { getIsTestingDb } from "../getIsTestingDb";
+import { assertFn } from "../boardConfigurationAssert";
+
+assertFn();
 
 const THREADS = os.cpus().length;
 const FILENAME = "temp-result/simulation-times-result.csv";

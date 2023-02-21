@@ -11,6 +11,7 @@ interface MyCollections {
   testCollection: mongoDB.Collection;
   scores: mongoDB.Collection;
   simulationTimes: mongoDB.Collection;
+  simulationResult: mongoDB.Collection;
 }
 
 class TicTacToeDb {
@@ -39,6 +40,7 @@ class TicTacToeDb {
       testCollection: this.db.collection("testCollection"),
       scores: this.db.collection("scores"),
       simulationTimes: this.db.collection("simulationTimes"),
+      simulationResult: this.db.collection("simulationResult"),
     };
 
     console.log(`Successfully connected to database: ${this.db.databaseName}`);

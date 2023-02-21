@@ -7,7 +7,9 @@
     "build": "tsc",
     "cli": "tsc && node ./build/game-in-cli",
     "server": "tsc && node ./build/server",
+    "rm-test-col": "tsc && node ./build/TicTacToeDb/removeTestCollection",
     "op-st": "tsc && node ./build/optimization/simulationTimes",
+    "op-r": "tsc && node ./build/optimization/simulationResult",
     "op-s": "tsc && node ./build/optimization/scores"
   },
   "dependencies": {
