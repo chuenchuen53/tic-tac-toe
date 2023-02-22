@@ -1,25 +1,13 @@
-export interface SolverData {
+export interface WorkerData {
   loseScore: number;
   drawScore: number;
   winScore: number;
   simulationTimes: number;
-}
-
-export interface WorkerData extends SolverData {
-  log: boolean;
-}
-
-export type BotResult = "win" | "lose" | "draw";
-export type BotResultCount = Record<BotResult, number>;
-
-export interface BotResultData {
   sampleSize: number;
-  startFirst: BotResultCount;
-  startSecond: BotResultCount;
+  logResult: boolean;
 }
 
-export interface FlattenBotResultPercent {
-  sampleSize: number;
+export interface FlattenBotResult {
   startFirst_lose: number;
   startFirst_draw: number;
   startFirst_win: number;
@@ -28,4 +16,14 @@ export interface FlattenBotResultPercent {
   startSecond_win: number;
 }
 
-export type ResultRow = SolverData & FlattenBotResultPercent;
+export interface WorkerResult extends FlattenBotResult {
+  loseScore: number;
+  drawScore: number;
+  winScore: number;
+  simulationTimes: number;
+  sampleSize: number;
+}
+
+export interface DbRow extends WorkerResult {
+  createdAt: Date;
+}

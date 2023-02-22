@@ -1,33 +1,44 @@
+import DateTimeUtil from "../DateTimeUtil";
 import { botResult } from "./botResult";
-import type { ResultRow, WorkerData } from "./typing";
-
-const SAMPLE_SIZE = 1000;
+import type { WorkerResult, WorkerData } from "./typing";
 
 export default function getBotResultPercent({
   loseScore,
   drawScore,
   winScore,
   simulationTimes,
-  log,
-}: WorkerData): ResultRow {
-  console.log("run", loseScore, drawScore, winScore);
-  const result = botResult({ loseScore, drawScore, winScore, simulationTimes }, SAMPLE_SIZE);
-  const resultRow: ResultRow = {
-    sampleSize: SAMPLE_SIZE,
+  sampleSize,
+  logResult,
+}: WorkerData): WorkerResult {
+  const start = new Date();
+  const startStr = DateTimeUtil.formatDate(start);
+  console.log(`start ${startStr} scores ${loseScore},${drawScore},${winScore} simulationTimes ${simulationTimes}`);
+
+  const result = botResult({ loseScore, drawScore, winScore, simulationTimes, sampleSize, logResult });
+  const resultRow: WorkerResult = {
     loseScore,
     drawScore,
     winScore,
     simulationTimes,
-    startFirst_lose: result.startFirst.lose,
-    startFirst_draw: result.startFirst.draw,
-    startFirst_win: result.startFirst.win,
-    startSecond_lose: result.startSecond.lose,
-    startSecond_draw: result.startSecond.draw,
-    startSecond_win: result.startSecond.win,
+    sampleSize,
+    startFirst_lose: result.startFirst_lose,
+    startFirst_draw: result.startFirst_draw,
+    startFirst_win: result.startFirst_win,
+    startSecond_lose: result.startSecond_lose,
+    startSecond_draw: result.startSecond_draw,
+    startSecond_win: result.startSecond_win,
   };
-  if (log) {
-    console.log("resultRow", resultRow);
+
+  if (logResult) {
+    console.log(resultRow);
   }
+
+  const end = new Date();
+  const endStr = DateTimeUtil.formatDate(end);
+  const timeSpent = DateTimeUtil.formatDurationToSec(start, end);
+  console.log(
+    `finish ${endStr} scores ${loseScore},${drawScore},${winScore} simulationTimes ${simulationTimes} timeSpent ${timeSpent}`
+  );
 
   return resultRow;
 }

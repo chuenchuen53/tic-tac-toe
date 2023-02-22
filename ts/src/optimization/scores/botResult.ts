@@ -1,24 +1,22 @@
 import TicTacToe from "../../TicTacToe";
 import TicTacToeSolver from "../../TicTacToeSolver";
-import { TicTacToeElement, GameStatus } from "../../typing";
-import { BotResult, BotResultCount, BotResultData, SolverData } from "./typing";
+import { TicTacToeElement, GameStatus, GameResultCount, GameResult } from "../../typing";
+import { FlattenBotResult, WorkerData } from "./typing";
 
 const BOT = TicTacToeElement.X;
-const BOT_WINS = GameStatus.X_WINS;
 const OPPONENT = TicTacToeElement.O;
-const OPPONENT_WINS = GameStatus.O_WINS;
 
-export function botResult(solverData: SolverData, sampleSize: number): BotResultData {
-  const { loseScore, drawScore, winScore, simulationTimes } = solverData;
-  let botStartFirst: BotResultCount = {
-    win: 0,
+export function botResult(workerData: WorkerData): FlattenBotResult {
+  const { loseScore, drawScore, winScore, simulationTimes, sampleSize } = workerData;
+  let botStartFirst: GameResultCount = {
     lose: 0,
     draw: 0,
+    win: 0,
   };
-  let botStartSecond: BotResultCount = {
-    win: 0,
+  let botStartSecond: GameResultCount = {
     lose: 0,
     draw: 0,
+    win: 0,
   };
 
   const ticTacToeBotFirst = new TicTacToe(BOT);
@@ -37,31 +35,24 @@ export function botResult(solverData: SolverData, sampleSize: number): BotResult
     ticTacToeBotSecond.resetBoard(OPPONENT);
   }
 
-  const startFirst = {
-    win: botStartFirst.win,
-    lose: botStartFirst.lose,
-    draw: botStartFirst.draw,
+  const flattenBotResult: FlattenBotResult = {
+    startFirst_lose: botStartFirst.lose,
+    startFirst_draw: botStartFirst.draw,
+    startFirst_win: botStartFirst.win,
+    startSecond_lose: botStartSecond.lose,
+    startSecond_draw: botStartSecond.draw,
+    startSecond_win: botStartSecond.win,
   };
 
-  const startSecond = {
-    win: botStartSecond.win,
-    lose: botStartSecond.lose,
-    draw: botStartSecond.draw,
-  };
-
-  return {
-    sampleSize,
-    startFirst,
-    startSecond,
-  };
+  return flattenBotResult;
 }
 
-function resultWithBotStartFirst(solver: TicTacToeSolver): BotResult {
+function resultWithBotStartFirst(solver: TicTacToeSolver): GameResult {
   const ticTacToe = solver.getTicTacToe();
   let gameStatus = ticTacToe.getGameStatus();
   while (gameStatus === GameStatus.IN_PROGRESS) {
-    const [row, col] = solver.getBestMove();
-    ticTacToe.input(row, col);
+    const bestMove = solver.getBestMove();
+    ticTacToe.input(bestMove[0], bestMove[1]);
     gameStatus = ticTacToe.getGameStatus();
 
     if (gameStatus === GameStatus.IN_PROGRESS) {
@@ -74,7 +65,7 @@ function resultWithBotStartFirst(solver: TicTacToeSolver): BotResult {
   return getBotResultFromGameStatus(gameStatus);
 }
 
-function resultWithBotStartSecond(solver: TicTacToeSolver): BotResult {
+function resultWithBotStartSecond(solver: TicTacToeSolver): GameResult {
   const ticTacToe = solver.getTicTacToe();
   let gameStatus = ticTacToe.getGameStatus();
   while (gameStatus === GameStatus.IN_PROGRESS) {
@@ -83,8 +74,8 @@ function resultWithBotStartSecond(solver: TicTacToeSolver): BotResult {
     gameStatus = ticTacToe.getGameStatus();
 
     if (gameStatus === GameStatus.IN_PROGRESS) {
-      const [row, col] = solver.getBestMove();
-      ticTacToe.input(row, col);
+      const bestMove = solver.getBestMove();
+      ticTacToe.input(bestMove[0], bestMove[1]);
       gameStatus = ticTacToe.getGameStatus();
     }
   }
@@ -92,10 +83,11 @@ function resultWithBotStartSecond(solver: TicTacToeSolver): BotResult {
   return getBotResultFromGameStatus(gameStatus);
 }
 
-function getBotResultFromGameStatus(gameStatus: GameStatus.X_WINS | GameStatus.O_WINS | GameStatus.DRAW): BotResult {
-  if (gameStatus === BOT_WINS) {
+function getBotResultFromGameStatus(gameStatus: GameStatus): GameResult {
+  const winner = TicTacToe.winnerFromGameStatus(gameStatus);
+  if (winner === BOT) {
     return "win";
-  } else if (gameStatus === OPPONENT_WINS) {
+  } else if (winner === OPPONENT) {
     return "lose";
   } else {
     return "draw";
