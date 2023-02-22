@@ -4,14 +4,12 @@ import Piscina from "piscina";
 import { setting } from "./setting";
 import ticTacToeDb from "../../TicTacToeDb";
 import type { DbRow, WorkerData, WorkerResult } from "./typing";
-import { getIsTestingDb } from "../getIsTestingDb";
 import { assertFn } from "../boardConfigurationAssert";
+import DateTimeUtil from "../DateTimeUtil";
 
 assertFn();
 
 const THREADS = os.cpus().length;
-
-const isTestingDB = getIsTestingDb();
 
 const piscina = new Piscina({
   filename: path.resolve(__dirname, "worker.js"),
@@ -20,6 +18,9 @@ const piscina = new Piscina({
 });
 
 async function main() {
+  const start = new Date();
+  console.log(`${DateTimeUtil.formatDate(start)} start main()`);
+
   await ticTacToeDb.connectToDatabase();
 
   const promiseArr: Promise<WorkerResult>[] = [];
@@ -33,12 +34,7 @@ async function main() {
       };
       const promise = piscina.run(workerData).then(async (workerResult: WorkerResult) => {
         const dbRow: DbRow = { ...workerResult, createdAt: new Date() };
-
-        if (isTestingDB) {
-          await ticTacToeDb.collections.testCollection.insertOne(dbRow);
-        } else {
-          await ticTacToeDb.collections.simulationResult.insertOne(dbRow);
-        }
+        await ticTacToeDb.collections.simulationResult.insertOne(dbRow);
         return workerResult;
       });
       promiseArr.push(promise);
@@ -48,9 +44,11 @@ async function main() {
   await Promise.all(promiseArr);
 
   ticTacToeDb.client.close();
+
+  const end = new Date();
+  console.log(
+    `${DateTimeUtil.formatDate(end)} finish main(), (execution time: ${DateTimeUtil.formatDurationToSec(start, end)})`
+  );
 }
 
-console.log(new Date(), "start main()");
-console.time("main");
 main();
-console.timeEnd("main");

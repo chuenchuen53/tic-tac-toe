@@ -7,8 +7,8 @@ interface Setting {
 }
 
 export const setting: Setting = {
-  simulationTimes: 50000,
-  numberOfSet: 10,
+  simulationTimes: 1000000,
+  numberOfSet: 5,
   cases: [
     "empty",
     "fill_x0",

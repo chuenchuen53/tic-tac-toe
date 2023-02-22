@@ -1,5 +1,6 @@
 import TicTacToeSolver from "../../TicTacToeSolver";
 import { getTicTacToe } from "../boardConfiguration";
+import DateTimeUtil from "../DateTimeUtil";
 import type { WorkerData, WorkerResult } from "./typing";
 
 const dummyScores = {
@@ -15,21 +16,29 @@ export default function getRequiredSimulationTimes({
   logResult,
 }: WorkerData): WorkerResult {
   const start = new Date();
-  console.log(`${start} start ${simulationCase} setNumber ${setNumber}`);
+  console.log(
+    `start ${DateTimeUtil.formatDate(
+      start
+    )} simulationCase ${simulationCase} simulationTimes ${simulationTimes} setNumber ${setNumber}`
+  );
 
   const ticTacToe = getTicTacToe(simulationCase);
   const solver = new TicTacToeSolver(dummyScores.lose, dummyScores.draw, dummyScores.win, simulationTimes, ticTacToe);
 
   const result = solver.getSimulationResult();
 
-  const end = new Date();
-
   if (logResult) {
     console.log(result);
   }
 
+  const end = new Date();
   console.log(
-    `${end} finish ${simulationCase} setNumber ${setNumber} (total time ${end.getTime() - start.getTime()}ms)`
+    `finish ${DateTimeUtil.formatDate(
+      end
+    )} simulationCase ${simulationCase} simulationTimes ${simulationTimes} setNumber ${setNumber} timeSpent ${DateTimeUtil.formatDurationToSec(
+      start,
+      end
+    )}`
   );
 
   return {

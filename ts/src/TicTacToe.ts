@@ -76,6 +76,10 @@ export default class TicTacToe {
     }
   }
 
+  static getOpponent(player: TicTacToeElement): TicTacToeElement {
+    return player === TicTacToeElement.X ? TicTacToeElement.O : TicTacToeElement.X;
+  }
+
   // Readonly only prevent modification of the board in compile time (not runtime)
   public getBoard(): Readonly<Readonly<(TicTacToeElement | null)[]>[]> {
     return this.board;

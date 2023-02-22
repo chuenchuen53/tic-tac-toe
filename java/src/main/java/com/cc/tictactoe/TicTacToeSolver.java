@@ -1,5 +1,7 @@
 package com.cc.tictactoe;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Random;
 
@@ -53,23 +55,42 @@ public class TicTacToeSolver {
 
     public Integer[][] calculateScore() {
         Integer[][] scores = new Integer[TicTacToe.BOARD_SIZE][TicTacToe.BOARD_SIZE];
+
+        GameResultCount[][] simulationResult = getSimulationResult();
+        for (int row = 0; row < TicTacToe.BOARD_SIZE; row++) {
+            for (int col = 0; col < TicTacToe.BOARD_SIZE; col++) {
+                if (simulationResult[row][col] == null) continue;
+                GameResultCount r = simulationResult[row][col];
+                scores[row][col] = r.getLose() * loseScore + r.getDraw() * drawScore + r.getWin() * winScore;
+            }
+        }
+
+        return scores;
+    }
+
+    @NotNull
+    public GameResultCount[][] getSimulationResult() {
+        GameResultCount[][] result = new GameResultCount[TicTacToe.BOARD_SIZE][TicTacToe.BOARD_SIZE];
         TicTacToeElement[][] board = ticTacToe.getBoard();
 
         for (int row = 0; row < TicTacToe.BOARD_SIZE; row++) {
             for (int col = 0; col < TicTacToe.BOARD_SIZE; col++) {
                 if (board[row][col] == null) {
-                    int score = 0;
+                    GameResultCount gameResultCount = new GameResultCount();
                     for (int i = 0; i < simulationTimes; i++) {
-                        score += simulateGame(row, col);
+                        GameResult gameResult = simulateGame(row, col);
+                        gameResultCount.add(gameResult);
                     }
-                    scores[row][col] = score;
+                    result[row][col] = gameResultCount;
                 }
             }
         }
-        return scores;
+
+        return result;
     }
 
-    private int simulateGame(int row, int col) {
+    @NotNull
+    private GameResult simulateGame(int row, int col) {
         TicTacToeElement player = ticTacToe.getTurn();
         TicTacToe simulatedGame = TicTacToe.clone(ticTacToe);
         simulatedGame.input(row, col);
@@ -83,12 +104,13 @@ public class TicTacToeSolver {
         GameStatus gameStatus = simulatedGame.getGameStatus();
         TicTacToeElement winner = gameStatus == GameStatus.X_WINS ? TicTacToeElement.X :
                 gameStatus == GameStatus.O_WINS ? TicTacToeElement.O : null;
-        if (winner == player) {
-            return winScore;
-        } else if (winner == null) {
-            return drawScore;
+
+        if (winner == null) {
+            return GameResult.DRAW;
+        } else if (winner == player) {
+            return GameResult.WIN;
         } else {
-            return loseScore;
+            return GameResult.LOSE;
         }
     }
 }

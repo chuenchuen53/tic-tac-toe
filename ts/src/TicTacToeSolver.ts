@@ -59,9 +59,9 @@ export default class TicTacToeSolver {
         const gameResultCount = simulationResult[row][col];
         if (gameResultCount === null) continue;
         scores[row][col] =
-          gameResultCount.win * this.winScore +
+          gameResultCount.lose * this.loseScore +
           gameResultCount.draw * this.drawScore +
-          gameResultCount.lose * this.loseScore;
+          gameResultCount.win * this.winScore;
       }
     }
 

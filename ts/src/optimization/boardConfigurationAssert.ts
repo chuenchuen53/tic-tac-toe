@@ -11,8 +11,8 @@ function boardToStr(x: TicTacToe) {
 }
 
 export function assertFn() {
-  assert(boardToStr(getTicTacToe("fill_x0")) === "XEE-EEE-EEE", "fill_x0");
   assert(boardToStr(getTicTacToe("empty")) === "EEE-EEE-EEE", "empty");
+  assert(boardToStr(getTicTacToe("fill_x0")) === "XEE-EEE-EEE", "fill_x0");
   assert(boardToStr(getTicTacToe("fill_x1")) === "EXE-EEE-EEE", "fill_x1");
   assert(boardToStr(getTicTacToe("fill_x2")) === "EEX-EEE-EEE", "fill_x2");
   assert(boardToStr(getTicTacToe("fill_x3")) === "EEE-XEE-EEE", "fill_x3");

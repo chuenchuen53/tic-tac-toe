@@ -1,5 +1,6 @@
 package com.cc.tictactoe;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -37,11 +38,30 @@ public class TicTacToe {
         return clone;
     }
 
+    @Nullable
+    public static TicTacToeElement winnerFromGameStatus(GameStatus gameStatus) {
+        switch (gameStatus) {
+            case X_WINS -> {
+                return TicTacToeElement.X;
+            }
+            case O_WINS -> {
+                return TicTacToeElement.O;
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
     public static TicTacToeElement getOpponent(TicTacToeElement player) {
         return player == TicTacToeElement.X ? TicTacToeElement.O : TicTacToeElement.X;
     }
 
     public TicTacToeElement[][] getBoard() {
+        return board;
+    }
+
+    public TicTacToeElement[][] getClonedBoard() {
         TicTacToeElement[][] copy = new TicTacToeElement[3][3];
         for (int i = 0; i < board.length; i++) {
             System.arraycopy(board[i], 0, copy[i], 0, board[i].length);
@@ -74,6 +94,8 @@ public class TicTacToe {
         }
     }
 
+
+    @NotNull
     public GameStatus getGameStatus() {
         TicTacToeElement winner = checkWinner();
         if (winner != null) {
@@ -101,10 +123,11 @@ public class TicTacToe {
         return Arrays.stream(board).flatMap(Arrays::stream).allMatch(Objects::nonNull);
     }
 
-    private @Nullable TicTacToeElement checkWinner() {
+    @Nullable
+    private TicTacToeElement checkWinner() {
         for (int[][] x : LINES_INDEXES) {
             TicTacToeElement[] cells = {board[x[0][0]][x[0][1]], board[x[1][0]][x[1][1]], board[x[2][0]][x[2][1]]};
-            if (Arrays.stream(cells).takeWhile(Objects::nonNull).count() == 3 && Arrays.stream(cells).distinct().count() == 1) {
+            if (Arrays.stream(cells).allMatch(Objects::nonNull) && Arrays.stream(cells).distinct().count() == 1) {
                 return cells[0];
             }
         }

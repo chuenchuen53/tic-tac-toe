@@ -6,7 +6,6 @@ import { setting } from "./setting";
 import ticTacToeDb from "../../TicTacToeDb";
 import type { CsvData, DbRow, WorkerData, WorkerResult } from "./typing";
 import { saveToCSV } from "../saveToCsv";
-import { getIsTestingDb } from "../getIsTestingDb";
 import { assertFn } from "../boardConfigurationAssert";
 
 assertFn();
@@ -20,8 +19,6 @@ const CSV_HEADER = [
   "precision",
   "requiredSimulations",
 ] satisfies (keyof CsvData[number])[];
-
-const isTestingDB = getIsTestingDb();
 
 const piscina = new Piscina({
   filename: path.resolve(__dirname, "worker.js"),
@@ -43,12 +40,7 @@ async function main() {
     };
     const promise = piscina.run(workerData).then(async (workerResult: WorkerResult) => {
       const dbRow: DbRow = { ...workerResult, createdAt: new Date() };
-
-      if (isTestingDB) {
-        await ticTacToeDb.collections.testCollection.insertOne(dbRow);
-      } else {
-        await ticTacToeDb.collections.simulationTimes.insertOne(dbRow);
-      }
+      await ticTacToeDb.collections.simulationTimes.insertOne(dbRow);
       return workerResult;
     });
     promiseArr.push(promise);

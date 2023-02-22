@@ -1,7 +1,6 @@
 import os from "os";
 import fs from "fs";
 import path from "path";
-import { Collection } from "mongodb";
 import Piscina from "piscina";
 import ticTacToeDb from "../../TicTacToeDb";
 import type { WorkerData, ResultRow, SolverData } from "./typing";
@@ -9,9 +8,6 @@ import { solverDataFromCsv } from "./solverDataFromCsv";
 
 const THREADS = os.cpus().length;
 const FILENAME = "./temp-result/scores.csv";
-
-let testCollection: Collection;
-let scoresCollection: Collection;
 
 const piscina = new Piscina({
   filename: path.resolve(__dirname, "worker.js"),
@@ -21,13 +17,6 @@ const piscina = new Piscina({
 
 async function run() {
   await ticTacToeDb.connectToDatabase();
-  testCollection = ticTacToeDb.collections.testCollection;
-  scoresCollection = ticTacToeDb.collections.scores;
-
-  if (!Math.random()) {
-    console.log(testCollection);
-  }
-
   await main();
   ticTacToeDb.client.close();
 }
@@ -51,7 +40,7 @@ async function main() {
     };
     const promise = piscina.run(workerData).then(async (result: ResultRow) => {
       console.timeEnd(`${loseScore} ${drawScore} ${winScore}`);
-      await scoresCollection.insertOne(result);
+      await ticTacToeDb.collections.scores.insertOne(result);
       return result;
     });
     promiseArr.push(promise);
