@@ -8,6 +8,7 @@ async function main() {
   await ticTacToeDb.connectToDatabase();
 
   const allRows = (await ticTacToeDb.collections.simulationResult.find().toArray()) as unknown as DbRow[];
+  console.log("allRows.length", allRows.length);
 
   const rowMap: RowMap = {};
   for (let simulationCase of SIMULATION_CASES) {
