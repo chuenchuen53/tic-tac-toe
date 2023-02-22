@@ -1,5 +1,7 @@
 package com.cc.tictactoe;
 
+import com.cc.optimization.BoardConfiguration;
+import com.cc.optimization.simulationresult.SimulationCase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -12,6 +14,7 @@ public class TicTacToeSolver {
     private final int simulationTimes;
     private final TicTacToe ticTacToe;
     private final Random random = new Random();
+    private SimulationCase matchCase;
 
     public TicTacToeSolver(int loseScore, int drawScore, int winScore, int simulationTimes, TicTacToe ticTacToe) {
         this.loseScore = loseScore;
@@ -19,18 +22,31 @@ public class TicTacToeSolver {
         this.winScore = winScore;
         this.simulationTimes = simulationTimes;
         this.ticTacToe = ticTacToe;
+        this.matchCase = null;
+        this.updateMatchCase();
     }
 
     public TicTacToe getTicTacToe() {
         return ticTacToe;
     }
 
+    public SimulationCase getMatchCase() {
+        return matchCase;
+    }
+
     public int[] getRandomMove() {
+        if (ticTacToe.getFilled() == 3) {
+            throw new RuntimeException("should not call getRandomMove when the board is full");
+        }
         List<int[]> availableMoves = ticTacToe.getAvailableMoves();
         return availableMoves.get(random.nextInt(availableMoves.size()));
     }
 
     public int[] getBestMove() {
+        if (ticTacToe.getFilled() == 3) {
+            throw new RuntimeException("should not call getBestMove when the board is full");
+        }
+
         Integer[][] scores = calculateScore();
         int maxScore = Integer.MIN_VALUE;
         int[] bestMove = new int[2];
@@ -56,7 +72,11 @@ public class TicTacToeSolver {
     public Integer[][] calculateScore() {
         Integer[][] scores = new Integer[TicTacToe.BOARD_SIZE][TicTacToe.BOARD_SIZE];
 
+        updateMatchCase();
+        // todo
         GameResultCount[][] simulationResult = getSimulationResult();
+        // todo
+
         for (int row = 0; row < TicTacToe.BOARD_SIZE; row++) {
             for (int col = 0; col < TicTacToe.BOARD_SIZE; col++) {
                 if (simulationResult[row][col] == null) continue;
@@ -87,6 +107,14 @@ public class TicTacToeSolver {
         }
 
         return result;
+    }
+
+    public void updateMatchCase() {
+        if (ticTacToe.getFilled() < 3) {
+            matchCase = BoardConfiguration.getMatchCase(ticTacToe);
+        } else if (matchCase != null) {
+            matchCase = null;
+        }
     }
 
     @NotNull

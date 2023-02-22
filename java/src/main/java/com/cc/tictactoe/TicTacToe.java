@@ -23,10 +23,12 @@ public class TicTacToe {
     private final TicTacToeElement[][] board = new TicTacToeElement[3][3];
     private TicTacToeElement startTurn;
     private TicTacToeElement turn;
+    private int filled;
 
     public TicTacToe(TicTacToeElement turn) {
         this.startTurn = turn;
         this.turn = turn;
+        this.filled = 0;
     }
 
     public static TicTacToe clone(TicTacToe ticTacToe) {
@@ -35,22 +37,17 @@ public class TicTacToe {
             System.arraycopy(ticTacToe.board[i], 0, clone.board[i], 0, ticTacToe.board[i].length);
         }
         clone.turn = ticTacToe.getTurn();
+        clone.filled = ticTacToe.filled;
         return clone;
     }
 
     @Nullable
     public static TicTacToeElement winnerFromGameStatus(GameStatus gameStatus) {
-        switch (gameStatus) {
-            case X_WINS -> {
-                return TicTacToeElement.X;
-            }
-            case O_WINS -> {
-                return TicTacToeElement.O;
-            }
-            default -> {
-                return null;
-            }
-        }
+        return switch (gameStatus) {
+            case X_WINS -> TicTacToeElement.X;
+            case O_WINS -> TicTacToeElement.O;
+            default -> null;
+        };
     }
 
     public static TicTacToeElement getOpponent(TicTacToeElement player) {
@@ -77,10 +74,15 @@ public class TicTacToe {
         return turn;
     }
 
+    public int getFilled() {
+        return filled;
+    }
+
     public boolean input(int rowIndex, int columnIndex) {
         if (board[rowIndex][columnIndex] == null) {
             board[rowIndex][columnIndex] = turn;
             toggleTurn();
+            this.filled++;
             return true;
         }
         return false;
@@ -89,6 +91,7 @@ public class TicTacToe {
     public void resetBoard(TicTacToeElement turn) {
         startTurn = turn;
         this.turn = turn;
+        this.filled = 0;
         for (TicTacToeElement[] row : board) {
             Arrays.fill(row, null);
         }
@@ -120,7 +123,7 @@ public class TicTacToe {
     }
 
     private boolean allFilled() {
-        return Arrays.stream(board).flatMap(Arrays::stream).allMatch(Objects::nonNull);
+        return filled == 9;
     }
 
     @Nullable

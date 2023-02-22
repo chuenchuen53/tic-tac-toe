@@ -149,7 +149,7 @@ export default class TicTacToe {
   }
 
   private allFilled(): boolean {
-    return this.board.flat().every((cell) => cell !== null);
+    return this.filled === 9;
   }
 
   private checkWinner(): TicTacToeElement | null {
