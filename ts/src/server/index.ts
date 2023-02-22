@@ -4,13 +4,26 @@ import { Request, Response } from "express";
 import { InputRequest } from "../api-typing";
 import TicTacToe from "../TicTacToe";
 import { TicTacToeElement } from "../typing";
+import TicTacToeSolver from "../TicTacToeSolver";
 
 const PORT = 8080;
 const CORS_OPTIONS = Object.freeze({
   origin: "http://localhost:3000",
 });
 
+const dummyLoseScore = -10;
+const dummyDrawScore = 8;
+const dummyWinScore = 10;
+const dummySimulationTimes = 1000;
+
 const ticTacToe = new TicTacToe(TicTacToeElement.X);
+const ticTacToeSolver = new TicTacToeSolver(
+  dummyLoseScore,
+  dummyDrawScore,
+  dummyWinScore,
+  dummySimulationTimes,
+  ticTacToe
+);
 
 const app = express();
 app.use(cors(CORS_OPTIONS));
@@ -32,6 +45,8 @@ app.post("/api/input", function (req: Request, res: Response) {
   const { rowIndex, columnIndex } = body as InputRequest;
   const success = ticTacToe.input(rowIndex, columnIndex);
   if (success) {
+    ticTacToeSolver.updateMatchCase();
+    console.log(ticTacToeSolver.getMatchCase());
     const resp = getGameData();
     res.json(resp);
   } else {

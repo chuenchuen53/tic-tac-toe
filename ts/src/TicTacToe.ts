@@ -52,16 +52,19 @@ export default class TicTacToe {
   ];
   private startTurn: TicTacToeElement;
   private turn: TicTacToeElement;
+  private filled: number;
 
   constructor(turn: TicTacToeElement) {
     this.startTurn = turn;
     this.turn = turn;
+    this.filled = 0;
   }
 
   static clone(ticTacToe: TicTacToe): TicTacToe {
     const clone = new TicTacToe(ticTacToe.startTurn);
     clone.board = ticTacToe.getClonedBoard();
-    clone.turn = ticTacToe.getTurn();
+    clone.turn = ticTacToe.turn;
+    clone.filled = ticTacToe.filled;
     return clone;
   }
 
@@ -97,10 +100,15 @@ export default class TicTacToe {
     return this.turn;
   }
 
+  public getFilled(): number {
+    return this.filled;
+  }
+
   public input(rowIndex: number, columnIndex: number): boolean {
     if (this.board[rowIndex][columnIndex] === null) {
       this.board[rowIndex][columnIndex] = this.turn;
       this.toggleTurn();
+      this.filled++;
       return true;
     }
     return false;
@@ -109,6 +117,7 @@ export default class TicTacToe {
   public resetBoard(turn: TicTacToeElement): void {
     this.startTurn = turn;
     this.turn = turn;
+    this.filled = 0;
     for (let i = 0; i < TicTacToe.BOARD_SIZE; i++) {
       for (let j = 0; j < TicTacToe.BOARD_SIZE; j++) {
         this.board[i][j] = null;

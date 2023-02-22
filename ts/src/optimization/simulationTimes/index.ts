@@ -6,9 +6,6 @@ import { setting } from "./setting";
 import ticTacToeDb from "../../TicTacToeDb";
 import type { CsvData, DbRow, WorkerData, WorkerResult } from "./typing";
 import { saveToCSV } from "../saveToCsv";
-import { assertFn } from "../boardConfigurationAssert";
-
-assertFn();
 
 const THREADS = os.cpus().length;
 const FILENAME = "temp-result/simulation-times-result.csv";

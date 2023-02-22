@@ -12,7 +12,9 @@ export default function getBotResultPercent({
 }: WorkerData): WorkerResult {
   const start = new Date();
   const startStr = DateTimeUtil.formatDate(start);
-  console.log(`start ${startStr} scores ${loseScore},${drawScore},${winScore} simulationTimes ${simulationTimes}`);
+  console.log(
+    `start ${startStr} scores ${loseScore},${drawScore},${winScore} simulationTimes ${simulationTimes} sampleSize ${sampleSize}`
+  );
 
   const result = botResult({ loseScore, drawScore, winScore, simulationTimes, sampleSize, logResult });
   const resultRow: WorkerResult = {
@@ -37,7 +39,7 @@ export default function getBotResultPercent({
   const endStr = DateTimeUtil.formatDate(end);
   const timeSpent = DateTimeUtil.formatDurationToSec(start, end);
   console.log(
-    `finish ${endStr} scores ${loseScore},${drawScore},${winScore} simulationTimes ${simulationTimes} timeSpent ${timeSpent}`
+    `finish ${endStr} scores ${loseScore},${drawScore},${winScore} simulationTimes ${simulationTimes} sampleSize ${sampleSize} timeSpent ${timeSpent}`
   );
 
   return resultRow;

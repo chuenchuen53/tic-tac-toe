@@ -4,10 +4,7 @@ import Piscina from "piscina";
 import { setting } from "./setting";
 import ticTacToeDb from "../../TicTacToeDb";
 import type { DbRow, WorkerData, WorkerResult } from "./typing";
-import { assertFn } from "../boardConfigurationAssert";
 import DateTimeUtil from "../DateTimeUtil";
-
-assertFn();
 
 const THREADS = os.cpus().length;
 

@@ -1,3 +1,6 @@
+import { getMatchCase } from "./optimization/boardConfiguration";
+import { SimulationCase } from "./optimization/constant";
+import PresetSimulationResult from "./optimization/PresetSimulationResult";
 import TicTacToe from "./TicTacToe";
 import { GameStatus, GameResult, SimulationResult, GameResultCount } from "./typing";
 
@@ -7,6 +10,7 @@ export default class TicTacToeSolver {
   private readonly winScore: number;
   private readonly simulationTimes: number;
   private readonly ticTacToe: TicTacToe;
+  private matchCase: SimulationCase | null;
 
   constructor(loseScore: number, drawScore: number, winScore: number, simulationTimes: number, ticTacToe: TicTacToe) {
     this.loseScore = loseScore;
@@ -14,18 +18,31 @@ export default class TicTacToeSolver {
     this.winScore = winScore;
     this.simulationTimes = simulationTimes;
     this.ticTacToe = ticTacToe;
+    this.matchCase = null;
+    this.updateMatchCase();
   }
 
   public getTicTacToe(): TicTacToe {
     return this.ticTacToe;
   }
 
+  public getMatchCase(): SimulationCase | null {
+    return this.matchCase;
+  }
+
   public getRandomMove(): number[] {
+    if (this.ticTacToe.getFilled() === 9) {
+      throw new Error("should not call getRandomMove when the board is full");
+    }
     const availableMoves = this.ticTacToe.getAvailableMoves();
     return availableMoves[Math.floor(Math.random() * availableMoves.length)];
   }
 
   public getBestMove(): number[] {
+    if (this.ticTacToe.getFilled() === 9) {
+      throw new Error("should not call getBestMove when the board is full");
+    }
+
     const scores: (number | null)[][] = this.calculateScores();
     let maxScore = -Infinity;
     let bestMove: number[] = [];
@@ -53,7 +70,11 @@ export default class TicTacToeSolver {
       [null, null, null],
     ];
 
-    const simulationResult = this.getSimulationResult();
+    this.updateMatchCase();
+    const simulationResult = this.matchCase
+      ? PresetSimulationResult.getPresetResult(this.matchCase)
+      : this.getSimulationResult();
+
     for (let row = 0; row < TicTacToe.BOARD_SIZE; row++) {
       for (let col = 0; col < TicTacToe.BOARD_SIZE; col++) {
         const gameResultCount = simulationResult[row][col];
@@ -94,6 +115,14 @@ export default class TicTacToeSolver {
     }
 
     return result;
+  }
+
+  public updateMatchCase(): void {
+    if (this.ticTacToe.getFilled() < 3) {
+      this.matchCase = getMatchCase(this.ticTacToe);
+    } else if (this.matchCase) {
+      this.matchCase = null;
+    }
   }
 
   private simulateGame(row: number, col: number): GameResult {
