@@ -16,6 +16,7 @@ public class TicTacToeDb {
     private static TicTacToeDb instance = null;
     public MongoCollection<Document> testCollection;
     public MongoCollection<Document> simulationResult;
+    public MongoCollection<Document> scores;
     private MongoClient client;
     private MongoDatabase db;
 
@@ -36,6 +37,7 @@ public class TicTacToeDb {
             db = client.getDatabase(TicTacToeDb.dbName);
             testCollection = db.getCollection("testCollection");
             simulationResult = db.getCollection("simulationResult");
+            scores = db.getCollection("scores");
             System.out.println("Successfully connected to database: " + TicTacToeDb.dbName);
         } catch (Exception e) {
             e.printStackTrace();

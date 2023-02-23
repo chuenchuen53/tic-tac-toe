@@ -111,7 +111,57 @@ public class BoardConfigurationTest {
     }
 
     @Test
-    public void matchCaseInputMoreThan2() {
+    public void matchCaseInput3() {
+        for (int i = 0; i < sampleSize; i++) {
+            TicTacToe xStartFirst = new TicTacToe(TicTacToeElement.X);
+            TicTacToeSolver xStartFirstSolver = new TicTacToeSolver(
+                    dummyLoseScore,
+                    dummyDrawScore,
+                    dummyWinScore,
+                    dummySimulationTimes,
+                    xStartFirst
+            );
+            int[] xStartFirstMove = xStartFirstSolver.getRandomMove();
+            xStartFirst.input(xStartFirstMove[0], xStartFirstMove[1]);
+            int[] xStartFirstMove2 = xStartFirstSolver.getRandomMove();
+            xStartFirst.input(xStartFirstMove2[0], xStartFirstMove2[1]);
+            int[] xStartFirstMove3 = xStartFirstSolver.getRandomMove();
+            xStartFirst.input(xStartFirstMove3[0], xStartFirstMove3[1]);
+            xStartFirstSolver.updateMatchCase();
+
+            String expectedKeyForXStartFirst = getThreeMoveKey(
+                    xStartFirstMove[0], xStartFirstMove[1],
+                    xStartFirstMove2[0], xStartFirstMove2[1],
+                    xStartFirstMove3[0], xStartFirstMove3[1]);
+            assertThat(BoardConfiguration.getMatchCase(xStartFirst).name(), equalTo(expectedKeyForXStartFirst));
+            assertThat(xStartFirstSolver.getMatchCase().name(), equalTo(expectedKeyForXStartFirst));
+
+            TicTacToe oStartFirst = new TicTacToe(TicTacToeElement.O);
+            TicTacToeSolver oStartFirstSolver = new TicTacToeSolver(
+                    dummyLoseScore,
+                    dummyDrawScore,
+                    dummyWinScore,
+                    dummySimulationTimes,
+                    oStartFirst
+            );
+            int[] oStartFirstMove = oStartFirstSolver.getRandomMove();
+            oStartFirst.input(oStartFirstMove[0], oStartFirstMove[1]);
+            int[] oStartFirstMove2 = oStartFirstSolver.getRandomMove();
+            oStartFirst.input(oStartFirstMove2[0], oStartFirstMove2[1]);
+            int[] oStartFirstMove3 = oStartFirstSolver.getRandomMove();
+            oStartFirst.input(oStartFirstMove3[0], oStartFirstMove3[1]);
+            oStartFirstSolver.updateMatchCase();
+
+            String expectedKeyForOStartFirst = getThreeMoveKey(oStartFirstMove[0], oStartFirstMove[1],
+                    oStartFirstMove2[0], oStartFirstMove2[1],
+                    oStartFirstMove3[0], oStartFirstMove3[1]);
+            assertThat(BoardConfiguration.getMatchCase(oStartFirst).name(), equalTo(expectedKeyForOStartFirst));
+            assertThat(oStartFirstSolver.getMatchCase().name(), equalTo(expectedKeyForOStartFirst));
+        }
+    }
+
+    @Test
+    public void matchCaseInputMoreThan3() {
         for (int i = 0; i < sampleSize; i++) {
             TicTacToe xStartFirst = new TicTacToe(TicTacToeElement.X);
             TicTacToeSolver xStartFirstSolver = new TicTacToeSolver(
@@ -122,7 +172,7 @@ public class BoardConfigurationTest {
                     xStartFirst
             );
 
-            for (int j = 0; j < randomInt(3, 10); j++) {
+            for (int j = 0; j < randomInt(4, 10); j++) {
                 if (xStartFirst.getGameStatus() == GameStatus.IN_PROGRESS) {
                     int[] randomMove = xStartFirstSolver.getRandomMove();
                     xStartFirst.input(randomMove[0], randomMove[1]);
@@ -141,7 +191,7 @@ public class BoardConfigurationTest {
                     dummySimulationTimes,
                     oStartFirst
             );
-            for (int j = 0; j < randomInt(3, 10); j++) {
+            for (int j = 0; j < randomInt(4, 10); j++) {
                 if (oStartFirst.getGameStatus() == GameStatus.IN_PROGRESS) {
                     int[] randomMove = oStartFirstSolver.getRandomMove();
                     oStartFirst.input(randomMove[0], randomMove[1]);
@@ -164,6 +214,17 @@ public class BoardConfigurationTest {
 
     private String getTwoMoveKey(int row1, int col1, int row2, int col2) {
         return "FILL_X" + to1DIndex(row1, col1) + "_O" + to1DIndex(row2, col2);
+    }
+
+    private String getThreeMoveKey(int row1, int col1, int row2, int col2, int row3, int col3) {
+        int i1 = to1DIndex(row1, col1);
+        int i3 = to1DIndex(row3, col3);
+
+        if (i1 > i3) {
+            return "FILL_X" + i3 + "_O" + to1DIndex(row2, col2) + "_X" + i1;
+        } else {
+            return "FILL_X" + i1 + "_O" + to1DIndex(row2, col2) + "_X" + i3;
+        }
     }
 
     private int randomInt(int min, int max) {

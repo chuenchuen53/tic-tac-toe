@@ -49,4 +49,9 @@ public class WorkerResult {
                 .append("startSecond_win", startSecond_win)
                 .append("createdAt", createdAt);
     }
+
+    @Override
+    public String toString() {
+        return toDocument().toJson();
+    }
 }

@@ -21,6 +21,17 @@ function getTwoMoveKey(row1: number, col1: number, row2: number, col2: number): 
   return `fill_x${to1DIndex(row1, col1)}_o${to1DIndex(row2, col2)}`;
 }
 
+function getThreeMoveKey(row1: number, col1: number, row2: number, col2: number, row3: number, col3: number): string {
+  const i1 = to1DIndex(row1, col1);
+  const i3 = to1DIndex(row3, col3);
+
+  if (i1 > i3) {
+    return `fill_x${i3}_o${to1DIndex(row2, col2)}_x${i1}`;
+  } else {
+    return `fill_x${i1}_o${to1DIndex(row2, col2)}_x${i3}`;
+  }
+}
+
 /**
  *
  * @param min number inclusive
@@ -124,7 +135,65 @@ describe("match case test", () => {
     }
   });
 
-  it(`input more than 2 case`, () => {
+  it(`input 3 case`, () => {
+    for (let i = 0; i < sampleSize; i++) {
+      const xStartFirst = new TicTacToe(TicTacToeElement.X);
+      const xStartFirstSolver = new TicTacToeSolver(
+        dummyLoseScore,
+        dummyDrawScore,
+        dummyWinScore,
+        dummySimulationTimes,
+        xStartFirst
+      );
+      const xStartFirstMove = xStartFirstSolver.getRandomMove();
+      xStartFirst.input(xStartFirstMove[0], xStartFirstMove[1]);
+      const xStartFirstMove2 = xStartFirstSolver.getRandomMove();
+      xStartFirst.input(xStartFirstMove2[0], xStartFirstMove2[1]);
+      const xStartFirstMove3 = xStartFirstSolver.getRandomMove();
+      xStartFirst.input(xStartFirstMove3[0], xStartFirstMove3[1]);
+      xStartFirstSolver.updateMatchCase();
+
+      const expectedKeyForXStartFirst = getThreeMoveKey(
+        xStartFirstMove[0],
+        xStartFirstMove[1],
+        xStartFirstMove2[0],
+        xStartFirstMove2[1],
+        xStartFirstMove3[0],
+        xStartFirstMove3[1]
+      );
+      expect(getMatchCase(xStartFirst)).toBe(expectedKeyForXStartFirst);
+      expect(xStartFirstSolver.getMatchCase()).toBe(expectedKeyForXStartFirst);
+
+      const oStartFirst = new TicTacToe(TicTacToeElement.O);
+      const oStartFirstSolver = new TicTacToeSolver(
+        dummyLoseScore,
+        dummyDrawScore,
+        dummyWinScore,
+        dummySimulationTimes,
+        oStartFirst
+      );
+      const oStartFirstMove = oStartFirstSolver.getRandomMove();
+      oStartFirst.input(oStartFirstMove[0], oStartFirstMove[1]);
+      const oStartFirstMove2 = oStartFirstSolver.getRandomMove();
+      oStartFirst.input(oStartFirstMove2[0], oStartFirstMove2[1]);
+      const oStartFirstMove3 = oStartFirstSolver.getRandomMove();
+      oStartFirst.input(oStartFirstMove3[0], oStartFirstMove3[1]);
+      oStartFirstSolver.updateMatchCase();
+
+      const expectedKeyForOStartFirst = getThreeMoveKey(
+        oStartFirstMove[0],
+        oStartFirstMove[1],
+        oStartFirstMove2[0],
+        oStartFirstMove2[1],
+        oStartFirstMove3[0],
+        oStartFirstMove3[1]
+      );
+      expect(getMatchCase(oStartFirst)).toBe(expectedKeyForOStartFirst);
+      expect(oStartFirstSolver.getMatchCase()).toBe(expectedKeyForOStartFirst);
+    }
+  });
+
+  it(`input more than 3 case`, () => {
     for (let i = 0; i < sampleSize; i++) {
       const xStartFirst = new TicTacToe(TicTacToeElement.X);
       const xStartFirstSolver = new TicTacToeSolver(
@@ -135,7 +204,7 @@ describe("match case test", () => {
         xStartFirst
       );
 
-      for (let j = 0; j < randomInt(3, 10); j++) {
+      for (let j = 0; j < randomInt(4, 10); j++) {
         if (xStartFirst.getGameStatus() === GameStatus.IN_PROGRESS) {
           const randomMove = xStartFirstSolver.getRandomMove();
           xStartFirst.input(randomMove[0], randomMove[1]);
@@ -156,7 +225,7 @@ describe("match case test", () => {
         oStartFirst
       );
 
-      for (let j = 0; j < randomInt(3, 10); j++) {
+      for (let j = 0; j < randomInt(4, 10); j++) {
         if (oStartFirst.getGameStatus() === GameStatus.IN_PROGRESS) {
           const randomMove = oStartFirstSolver.getRandomMove();
           oStartFirst.input(randomMove[0], randomMove[1]);

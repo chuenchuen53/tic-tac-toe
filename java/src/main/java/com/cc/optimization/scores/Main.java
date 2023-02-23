@@ -2,7 +2,6 @@ package com.cc.optimization.scores;
 
 import com.cc.optimization.DateTimeUtil;
 import com.cc.optimization.EffectiveCombination;
-import com.cc.optimization.simulationresult.Worker;
 import com.cc.tictactoedb.TicTacToeDb;
 
 import java.util.Date;
@@ -22,14 +21,15 @@ public class Main {
         TicTacToeDb ticTacToeDb = TicTacToeDb.getInstance();
 
         List<int[]> allCombination = EffectiveCombination.getAll();
-        List<int[]> generateCombination = allCombination.subList(0, 389);
+//        List<int[]> generateCombination = allCombination.subList(0, 389);
+        List<int[]> generateCombination = allCombination.subList(0, 40);
 
         ExecutorService executor = Executors.newFixedThreadPool(THREADS);
 
         for (int[] scores : generateCombination) {
             int loseScore = scores[0];
-            int drawScore = scores[0];
-            int winScore = scores[0];
+            int drawScore = scores[1];
+            int winScore = scores[2];
             WorkerData workerData = new WorkerData(loseScore, drawScore, winScore, Setting.simulationTimes,
                     Setting.sampleSize, true);
             CompletableFuture.supplyAsync(new Worker(workerData), executor).thenApply(x -> {
