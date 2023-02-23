@@ -22,7 +22,7 @@ async function main() {
   await ticTacToeDb.connectToDatabase();
 
   const allCombination = effectiveCombination();
-  const generateCombination = allCombination.slice();
+  const generateCombination = allCombination.slice(0, 389);
 
   const promiseArr: Promise<void>[] = [];
 

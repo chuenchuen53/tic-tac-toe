@@ -1,6 +1,7 @@
 package com.cc.tictactoe;
 
 import com.cc.optimization.BoardConfiguration;
+import com.cc.optimization.PresetSimulationResult;
 import com.cc.optimization.simulationresult.SimulationCase;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +36,7 @@ public class TicTacToeSolver {
     }
 
     public int[] getRandomMove() {
-        if (ticTacToe.getFilled() == 3) {
+        if (ticTacToe.getFilled() == 9) {
             throw new RuntimeException("should not call getRandomMove when the board is full");
         }
         List<int[]> availableMoves = ticTacToe.getAvailableMoves();
@@ -43,7 +44,7 @@ public class TicTacToeSolver {
     }
 
     public int[] getBestMove() {
-        if (ticTacToe.getFilled() == 3) {
+        if (ticTacToe.getFilled() == 9) {
             throw new RuntimeException("should not call getBestMove when the board is full");
         }
 
@@ -73,9 +74,9 @@ public class TicTacToeSolver {
         Integer[][] scores = new Integer[TicTacToe.BOARD_SIZE][TicTacToe.BOARD_SIZE];
 
         updateMatchCase();
-        // todo
-        GameResultCount[][] simulationResult = getSimulationResult();
-        // todo
+        GameResultCount[][] simulationResult = matchCase != null
+                ? PresetSimulationResult.getPresetResult(matchCase)
+                : getSimulationResult();
 
         for (int row = 0; row < TicTacToe.BOARD_SIZE; row++) {
             for (int col = 0; col < TicTacToe.BOARD_SIZE; col++) {

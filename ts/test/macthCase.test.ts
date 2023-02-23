@@ -1,7 +1,7 @@
 import { getMatchCase } from "../src/optimization/boardConfiguration";
 import TicTacToe from "../src/TicTacToe";
 import TicTacToeSolver from "../src/TicTacToeSolver";
-import { TicTacToeElement } from "../src/typing";
+import { GameStatus, TicTacToeElement } from "../src/typing";
 
 const dummyLoseScore = -10;
 const dummyDrawScore = 0;
@@ -126,7 +126,6 @@ describe("match case test", () => {
 
   it(`input more than 2 case`, () => {
     for (let i = 0; i < sampleSize; i++) {
-      4;
       const xStartFirst = new TicTacToe(TicTacToeElement.X);
       const xStartFirstSolver = new TicTacToeSolver(
         dummyLoseScore,
@@ -136,9 +135,11 @@ describe("match case test", () => {
         xStartFirst
       );
 
-      for (let i = 0; i < randomInt(3, 10); i++) {
-        const randomMove = xStartFirstSolver.getRandomMove();
-        xStartFirst.input(randomMove[0], randomMove[1]);
+      for (let j = 0; j < randomInt(3, 10); j++) {
+        if (xStartFirst.getGameStatus() === GameStatus.IN_PROGRESS) {
+          const randomMove = xStartFirstSolver.getRandomMove();
+          xStartFirst.input(randomMove[0], randomMove[1]);
+        }
       }
 
       xStartFirstSolver.updateMatchCase();
@@ -155,9 +156,11 @@ describe("match case test", () => {
         oStartFirst
       );
 
-      for (let i = 0; i < randomInt(3, 10); i++) {
-        const randomMove = oStartFirstSolver.getRandomMove();
-        oStartFirst.input(randomMove[0], randomMove[1]);
+      for (let j = 0; j < randomInt(3, 10); j++) {
+        if (oStartFirst.getGameStatus() === GameStatus.IN_PROGRESS) {
+          const randomMove = oStartFirstSolver.getRandomMove();
+          oStartFirst.input(randomMove[0], randomMove[1]);
+        }
       }
 
       oStartFirstSolver.updateMatchCase();
