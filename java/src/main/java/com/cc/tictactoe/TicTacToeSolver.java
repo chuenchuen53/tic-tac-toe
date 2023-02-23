@@ -6,7 +6,8 @@ import com.cc.optimization.simulationresult.SimulationCase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 public class TicTacToeSolver {
     private final int loseScore;
@@ -14,7 +15,7 @@ public class TicTacToeSolver {
     private final int winScore;
     private final int simulationTimes;
     private final TicTacToe ticTacToe;
-    private final Random random = new Random();
+    private final ThreadLocalRandom random = ThreadLocalRandom.current();
     private SimulationCase matchCase;
 
     public TicTacToeSolver(int loseScore, int drawScore, int winScore, int simulationTimes, TicTacToe ticTacToe) {
@@ -111,7 +112,8 @@ public class TicTacToeSolver {
     }
 
     public void updateMatchCase() {
-        if (ticTacToe.getFilled() < 4) {
+        // todo sld be 4
+        if (ticTacToe.getFilled() < 3) {
             matchCase = BoardConfiguration.getMatchCase(ticTacToe);
         } else if (matchCase != null) {
             matchCase = null;

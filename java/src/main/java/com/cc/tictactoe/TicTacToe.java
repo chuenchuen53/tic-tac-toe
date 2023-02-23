@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class TicTacToe {
     public static final int BOARD_SIZE = 3;
@@ -100,13 +99,12 @@ public class TicTacToe {
 
     @NotNull
     public GameStatus getGameStatus() {
+        if (filled < 5) return GameStatus.IN_PROGRESS;
         TicTacToeElement winner = checkWinner();
         if (winner != null) {
             return winner == TicTacToeElement.X ? GameStatus.X_WINS : GameStatus.O_WINS;
         }
-        if (allFilled()) {
-            return GameStatus.DRAW;
-        }
+        if (filled == 9) return GameStatus.DRAW;
         return GameStatus.IN_PROGRESS;
     }
 
@@ -122,15 +120,12 @@ public class TicTacToe {
         return availableMove;
     }
 
-    private boolean allFilled() {
-        return filled == 9;
-    }
 
     @Nullable
     private TicTacToeElement checkWinner() {
         for (int[][] x : LINES_INDEXES) {
             TicTacToeElement[] cells = {board[x[0][0]][x[0][1]], board[x[1][0]][x[1][1]], board[x[2][0]][x[2][1]]};
-            if (Arrays.stream(cells).allMatch(Objects::nonNull) && Arrays.stream(cells).distinct().count() == 1) {
+            if (cells[0] != null && cells[0] == cells[1] && cells[1] == cells[2]) {
                 return cells[0];
             }
         }
