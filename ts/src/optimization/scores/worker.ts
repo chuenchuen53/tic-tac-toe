@@ -2,7 +2,7 @@ import DateTimeUtil from "../DateTimeUtil";
 import { botResult } from "./botResult";
 import type { WorkerResult, WorkerData } from "./typing";
 
-export default function getBotResultPercent({
+export default function getBotResult({
   loseScore,
   drawScore,
   winScore,

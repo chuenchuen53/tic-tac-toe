@@ -126,13 +126,12 @@ export default class TicTacToe {
   }
 
   public getGameStatus(): GameStatus {
+    if (this.filled < 5) return GameStatus.IN_PROGRESS;
     const winner = this.checkWinner();
     if (winner !== null) {
       return winner === TicTacToeElement.X ? GameStatus.X_WINS : GameStatus.O_WINS;
     }
-    if (this.allFilled()) {
-      return GameStatus.DRAW;
-    }
+    if (this.filled === 9) return GameStatus.DRAW;
     return GameStatus.IN_PROGRESS;
   }
 
@@ -148,10 +147,6 @@ export default class TicTacToe {
     return availableMoves;
   }
 
-  private allFilled(): boolean {
-    return this.filled === 9;
-  }
-
   private checkWinner(): TicTacToeElement | null {
     for (const x of this.LINES_INDEXES) {
       const cells: (TicTacToeElement | null)[] = [
@@ -159,7 +154,7 @@ export default class TicTacToe {
         this.board[x[1][0]][x[1][1]],
         this.board[x[2][0]][x[2][1]],
       ];
-      if (cells.every((cell) => cell !== null) && new Set(cells).size === 1) {
+      if (cells[0] && cells[0] === cells[1] && cells[1] === cells[2]) {
         return cells[0];
       }
     }
