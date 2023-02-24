@@ -18,8 +18,6 @@ export interface WorkerResult {
   requiredSimulations: number;
 }
 
-export type CsvData = Omit<WorkerResult, "allResult">[];
-
 export interface DbRow extends WorkerResult {
   createdAt: Date;
 }
