@@ -4,6 +4,8 @@ import { DbRow } from "../simulationResult/typing";
 import { getN, meanAndSdFromResult, ratioFromResult } from "../simulationTimes/requiredSimulationTimes";
 import { ResultMap as RowMap } from "./typing";
 
+const THRESHOLD_FOR_RATIO_DIFF_OF_DIFF_SET = 0.005;
+
 async function main() {
   await ticTacToeDb.connectToDatabase();
 
@@ -21,6 +23,38 @@ async function main() {
     const rows = rowMap[simulationCase];
     const allResult = rows.map((row) => row.result);
     ratioMap[simulationCase] = ratioFromResult(allResult, rows[0].simulationTimes);
+  }
+
+  for (let simulationCase of SIMULATION_CASES) {
+    const ratioArr = ratioMap[simulationCase].flat();
+    for (let cell of ratioArr) {
+      const loseArr = cell.lose.sort((a, b) => a - b);
+      const drawArr = cell.draw.sort((a, b) => a - b);
+      const winArr = cell.win.sort((a, b) => a - b);
+
+      const loseDiff = loseArr[loseArr.length - 1] - loseArr[0];
+      const drawDiff = drawArr[drawArr.length - 1] - drawArr[0];
+      const winDiff = winArr[winArr.length - 1] - winArr[0];
+
+      if (
+        loseDiff > THRESHOLD_FOR_RATIO_DIFF_OF_DIFF_SET ||
+        drawDiff > THRESHOLD_FOR_RATIO_DIFF_OF_DIFF_SET ||
+        winDiff > THRESHOLD_FOR_RATIO_DIFF_OF_DIFF_SET
+      ) {
+        console.log(
+          "simulationCase",
+          simulationCase,
+          "cell",
+          cell,
+          "loseDiff",
+          loseDiff,
+          "drawDiff",
+          drawDiff,
+          "winDiff",
+          winDiff
+        );
+      }
+    }
   }
 
   const meanAndSdMap: Record<string, ReturnType<typeof meanAndSdFromResult>> = {};
@@ -59,7 +93,7 @@ async function main() {
     maxNMap[simulationCase] = maxN;
   }
 
-  console.log(JSON.stringify(meanAndSdMap, null, 2));
+  0 && console.log(JSON.stringify(meanAndSdMap));
   console.log(JSON.stringify(maxNMap, null, 2));
 
   ticTacToeDb.client.close();
