@@ -118,7 +118,7 @@ export default class TicTacToeSolver {
   }
 
   public updateMatchCase(): void {
-    if (this.ticTacToe.getFilled() < 4) {
+    if (this.ticTacToe.getFilled() < 5) {
       this.matchCase = getMatchCase(this.ticTacToe);
     } else if (this.matchCase) {
       this.matchCase = null;
