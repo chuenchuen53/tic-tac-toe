@@ -1,4 +1,3 @@
-import os from "os";
 import path from "path";
 import Piscina from "piscina";
 import ticTacToeDb from "../../TicTacToeDb";
@@ -6,8 +5,9 @@ import type { DbRow, WorkerData, WorkerResult } from "./typing";
 import { effectiveCombination } from "../effectiveCombination";
 import { setting } from "./settings";
 import DateTimeUtil from "../DateTimeUtil";
+import { envVariables } from "../../envVariables";
 
-const THREADS = os.cpus().length;
+const THREADS = envVariables.THREADS;
 
 const piscina = new Piscina({
   filename: path.resolve(__dirname, "worker.js"),

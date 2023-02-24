@@ -6,6 +6,7 @@ import { DbRow } from "../simulationResult/typing";
 import { ResultMap as RowMap } from "./typing";
 
 const FILE_PATH = "temp-result/aggregation.json";
+const UPPERCASE_KEY_FILE_PATH = "temp-result/aggregation-uppercase-key.json";
 const THRESHOLD_FOR_SIMILAR_POSITION = 0.005;
 
 async function main() {
@@ -46,8 +47,16 @@ async function main() {
     output[simulationCase] = makeEquivalentPositionSameResult(aggregationMap, simulationCase);
   }
 
+  const uppercaseOutput: Record<string, SimulationResult> = {};
+  for (let key in output) {
+    uppercaseOutput[key.toUpperCase()] = output[key];
+  }
+
   fs.writeFileSync(FILE_PATH, JSON.stringify(output, null, 0));
   console.log(`File written to ${FILE_PATH}`);
+
+  fs.writeFileSync(UPPERCASE_KEY_FILE_PATH, JSON.stringify(uppercaseOutput, null, 0));
+  console.log(`File written to ${UPPERCASE_KEY_FILE_PATH}`);
 }
 
 function makeEquivalentPositionSameResult(

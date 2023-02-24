@@ -32,7 +32,7 @@ export default function getBotResult({
   };
 
   if (logResult) {
-    console.log(resultRow);
+    console.log(JSON.stringify(resultRow));
   }
 
   const end = new Date();

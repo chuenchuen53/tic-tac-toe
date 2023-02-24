@@ -111,9 +111,8 @@ public class TicTacToeSolver {
         return result;
     }
 
-    public void updateMatchCase() {
-        // todo sld be 4
-        if (ticTacToe.getFilled() < 3) {
+    public void updateMatchCase() {   
+        if (ticTacToe.getFilled() < 4) {
             matchCase = BoardConfiguration.getMatchCase(ticTacToe);
         } else if (matchCase != null) {
             matchCase = null;

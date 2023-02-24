@@ -1,5 +1,6 @@
 package com.cc.optimization.scores;
 
+import com.cc.EnvVariables;
 import com.cc.optimization.DateTimeUtil;
 import com.cc.optimization.EffectiveCombination;
 import com.cc.tictactoedb.TicTacToeDb;
@@ -12,7 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-    private static final int THREADS = Runtime.getRuntime().availableProcessors();
+    private static final int THREADS = EnvVariables.THREADS;
 
     public static void main(String[] args) {
         Date start = new Date();
@@ -21,8 +22,7 @@ public class Main {
         TicTacToeDb ticTacToeDb = TicTacToeDb.getInstance();
 
         List<int[]> allCombination = EffectiveCombination.getAll();
-//        List<int[]> generateCombination = allCombination.subList(0, 389);
-        List<int[]> generateCombination = allCombination.subList(0, 40);
+        List<int[]> generateCombination = allCombination.subList(0, 389);
 
         ExecutorService executor = Executors.newFixedThreadPool(THREADS);
 
