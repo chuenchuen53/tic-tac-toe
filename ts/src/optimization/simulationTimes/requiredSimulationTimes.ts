@@ -22,7 +22,7 @@ export default function requiredSimulationTimes(
   sampleSize: number,
   simulationTimes: number,
   precision: number,
-  log = false
+  logResult: boolean
 ): WorkerResult {
   const allResult: SimulationResult[] = [];
   const ticTacToe = getTicTacToe(simulationCase);
@@ -55,26 +55,23 @@ export default function requiredSimulationTimes(
 
   const result = simulationTimes * maxN;
 
-  if (log) {
+  if (logResult) {
+    const mean = meanAndSdArr.map((x) =>
+      x.map((y) =>
+        y ? `{lose: ${y.lose.mean.toFixed(2)}, draw: ${y.draw.mean.toFixed(2)}, win: ${y.win.mean.toFixed(2)}}` : null
+      )
+    );
+    const sd = meanAndSdArr.map((x) =>
+      x.map((y) =>
+        y ? `{lose: ${y.lose.sd.toFixed(2)}, draw: ${y.draw.sd.toFixed(2)}, win: ${y.win.sd.toFixed(2)}}` : null
+      )
+    );
+
     console.log("simulationCase", simulationCase);
-    console.log(
-      "mean",
-      meanAndSdArr.map((x) =>
-        x.map((y) =>
-          y ? `{lose: ${y.lose.mean.toFixed(2)}, draw: ${y.draw.mean.toFixed(2)}, win: ${y.win.mean.toFixed(2)}}` : null
-        )
-      )
-    );
-    console.log(
-      "sd",
-      meanAndSdArr.map((x) =>
-        x.map((y) =>
-          y ? `{lose: ${y.lose.sd.toFixed(2)}, draw: ${y.draw.sd.toFixed(2)}, win: ${y.win.sd.toFixed(2)}}` : null
-        )
-      )
-    );
-    console.log("NValues", NValues);
-    console.log("result", result);
+    console.log("mean", JSON.stringify(mean));
+    console.log("sd", JSON.stringify(sd));
+    console.log("NValues", JSON.stringify(NValues));
+    console.log("result", JSON.stringify(result));
   }
 
   return {

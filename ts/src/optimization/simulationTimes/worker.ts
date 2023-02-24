@@ -1,3 +1,4 @@
+import DateTimeUtil from "../DateTimeUtil";
 import requiredSimulationTimes from "./requiredSimulationTimes";
 import type { WorkerData, WorkerResult } from "./typing";
 
@@ -9,11 +10,18 @@ export default function getRequiredSimulationTimes({
   logResult,
 }: WorkerData): WorkerResult {
   const start = new Date();
-  console.log(`${start} start ${simulationCase}`);
+  const startStr = DateTimeUtil.formatDate(start);
+  console.log(
+    `start ${startStr} simulationCase ${simulationCase} sampleSize ${sampleSize} simulationTimes ${simulationTimes} precision ${precision}`
+  );
 
   const result = requiredSimulationTimes(simulationCase, sampleSize, simulationTimes, precision, logResult);
 
   const end = new Date();
-  console.log(`${end} finish ${simulationCase} (total time ${end.getTime() - start.getTime()}ms)`);
+  const endStr = DateTimeUtil.formatDate(end);
+  const timeSpent = DateTimeUtil.formatDurationToSec(start, end);
+  console.log(
+    `finish ${endStr} simulationCase ${simulationCase} sampleSize ${sampleSize} simulationTimes ${simulationTimes} precision ${precision} timeSpent ${timeSpent}`
+  );
   return result;
 }

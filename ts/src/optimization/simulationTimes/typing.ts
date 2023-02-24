@@ -6,7 +6,7 @@ export interface WorkerData {
   sampleSize: number;
   simulationTimes: number;
   precision: number;
-  logResult?: boolean;
+  logResult: boolean;
 }
 
 export interface WorkerResult {

@@ -1,21 +1,12 @@
-import os from "os";
 import path from "path";
 import Piscina from "piscina";
-import { SIMULATION_CASES } from "../constant";
 import { setting } from "./setting";
 import ticTacToeDb from "../../TicTacToeDb";
-import type { CsvData, DbRow, WorkerData, WorkerResult } from "./typing";
-import { saveToCSV } from "../saveToCsv";
+import DateTimeUtil from "../DateTimeUtil";
+import { envVariables } from "../../envVariables";
+import type { DbRow, WorkerData, WorkerResult } from "./typing";
 
-const THREADS = os.cpus().length;
-const FILENAME = "temp-result/simulation-times-result.csv";
-const CSV_HEADER = [
-  "simulationCase",
-  "sampleSize",
-  "simulationTimes",
-  "precision",
-  "requiredSimulations",
-] satisfies (keyof CsvData[number])[];
+const THREADS = envVariables.THREADS;
 
 const piscina = new Piscina({
   filename: path.resolve(__dirname, "worker.js"),
@@ -24,10 +15,16 @@ const piscina = new Piscina({
 });
 
 async function main() {
+  const start = new Date();
+  console.log(`${DateTimeUtil.formatDate(start)} start main()`);
+
   await ticTacToeDb.connectToDatabase();
 
+  const generateCases = setting.cases.slice();
+
   const promiseArr: Promise<WorkerResult>[] = [];
-  for (let simulationCase of SIMULATION_CASES) {
+
+  for (let simulationCase of generateCases) {
     const workerData: WorkerData = {
       simulationCase,
       sampleSize: setting.sampleSize,
@@ -43,20 +40,13 @@ async function main() {
     promiseArr.push(promise);
   }
 
-  const result = await Promise.all(promiseArr);
-  const csvData: CsvData = result.map((row) => ({
-    simulationCase: row.simulationCase,
-    sampleSize: row.sampleSize,
-    simulationTimes: row.simulationTimes,
-    precision: row.precision,
-    requiredSimulations: row.requiredSimulations,
-  }));
-  saveToCSV(csvData, CSV_HEADER, FILENAME);
+  await Promise.all(promiseArr);
 
   ticTacToeDb.client.close();
+  const end = new Date();
+  console.log(
+    `${DateTimeUtil.formatDate(end)} finish main(), (execution time: ${DateTimeUtil.formatDurationToSec(start, end)})`
+  );
 }
 
-console.log(new Date(), "start main()");
-console.time("main");
 main();
-console.timeEnd("main");
