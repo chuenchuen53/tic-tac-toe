@@ -1,4 +1,4 @@
-package com.cc.optimization.simulationresult;
+package com.cc.optimization;
 
 public enum SimulationCase {
     EMPTY("empty"),

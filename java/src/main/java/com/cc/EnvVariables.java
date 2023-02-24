@@ -8,6 +8,7 @@ public final class EnvVariables {
     public static final String DB_CONN_STRING;
     public static final String DB_NAME;
     public static final String DB_NAME_FOR_DEV;
+    public static final int THREADS;
 
     static {
         Dotenv dotenv = Dotenv.load();
@@ -15,6 +16,7 @@ public final class EnvVariables {
         DB_CONN_STRING = dotenv.get("DB_CONN_STRING");
         DB_NAME = dotenv.get("DB_NAME");
         DB_NAME_FOR_DEV = dotenv.get("DB_NAME_FOR_DEV");
+        THREADS = Integer.parseInt(dotenv.get("THREADS"));
 
         if (ENV == null) throw new RuntimeException("NODE_ENV is not set in env");
         if (!(ENV.equals("dev") || ENV.equals("prod"))) {
@@ -23,6 +25,7 @@ public final class EnvVariables {
         if (DB_CONN_STRING == null) throw new RuntimeException("DB_CONN_STRING is not set in env");
         if (DB_NAME == null) throw new RuntimeException("DB_NAME is not set in env");
         if (DB_NAME_FOR_DEV == null) throw new RuntimeException("DB_NAME_FOR_DEV is not set in env");
+        if (THREADS < 1) throw new RuntimeException("THREADS is not set in env");
     }
 
     private EnvVariables() {

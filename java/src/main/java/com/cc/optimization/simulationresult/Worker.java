@@ -2,6 +2,7 @@ package com.cc.optimization.simulationresult;
 
 import com.cc.optimization.BoardConfiguration;
 import com.cc.optimization.DateTimeUtil;
+import com.cc.optimization.SimulationCase;
 import com.cc.tictactoe.GameResultCount;
 import com.cc.tictactoe.TicTacToe;
 import com.cc.tictactoe.TicTacToeSolver;

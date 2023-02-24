@@ -1,6 +1,5 @@
 package com.cc.optimization;
 
-import com.cc.optimization.simulationresult.SimulationCase;
 import com.cc.tictactoe.GameResultCount;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

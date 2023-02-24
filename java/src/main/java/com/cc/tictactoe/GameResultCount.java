@@ -32,7 +32,7 @@ public class GameResultCount {
 
     @Override
     public String toString() {
-        return String.format("{ lose: %d, draw: %d, win: %d }", lose, draw, win);
+        return toDocument().toJson();
     }
 
     public Document toDocument() {

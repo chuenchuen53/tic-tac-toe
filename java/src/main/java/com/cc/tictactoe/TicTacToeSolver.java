@@ -2,7 +2,7 @@ package com.cc.tictactoe;
 
 import com.cc.optimization.BoardConfiguration;
 import com.cc.optimization.PresetSimulationResult;
-import com.cc.optimization.simulationresult.SimulationCase;
+import com.cc.optimization.SimulationCase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

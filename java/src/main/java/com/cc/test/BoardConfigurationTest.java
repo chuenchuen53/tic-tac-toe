@@ -2,7 +2,7 @@ package com.cc.test;
 
 import com.cc.optimization.BoardConfiguration;
 import com.cc.optimization.Constant;
-import com.cc.optimization.simulationresult.SimulationCase;
+import com.cc.optimization.SimulationCase;
 import com.cc.tictactoe.GameStatus;
 import com.cc.tictactoe.TicTacToe;
 import com.cc.tictactoe.TicTacToeElement;

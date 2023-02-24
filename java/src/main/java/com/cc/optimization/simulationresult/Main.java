@@ -1,7 +1,9 @@
 package com.cc.optimization.simulationresult;
 
+import com.cc.EnvVariables;
 import com.cc.optimization.Constant;
 import com.cc.optimization.DateTimeUtil;
+import com.cc.optimization.SimulationCase;
 import com.cc.tictactoedb.TicTacToeDb;
 
 import java.util.Date;
@@ -11,17 +13,19 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-    private static final int THREADS = Runtime.getRuntime().availableProcessors();
+    private static final int THREADS = EnvVariables.THREADS;
 
     public static void main(String[] args) {
         Date start = new Date();
         System.out.println(DateTimeUtil.formatDate(start) + " start main()");
 
+        SimulationCase[] generateCases = Constant.cases;
+
         TicTacToeDb ticTacToeDb = TicTacToeDb.getInstance();
 
         ExecutorService executor = Executors.newFixedThreadPool(THREADS);
 
-        for (SimulationCase simulationCase : Constant.cases) {
+        for (SimulationCase simulationCase : generateCases) {
             for (int setNumber = 0; setNumber < Constant.numberOfSet; setNumber++) {
                 CompletableFuture.supplyAsync(
                         new Worker(simulationCase, Constant.simulationTimes, setNumber, true),

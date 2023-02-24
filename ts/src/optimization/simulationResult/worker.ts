@@ -28,7 +28,7 @@ export default function getRequiredSimulationTimes({
   const result = solver.getSimulationResult();
 
   if (logResult) {
-    console.log(result);
+    console.log(JSON.stringify(result));
   }
 
   const end = new Date();

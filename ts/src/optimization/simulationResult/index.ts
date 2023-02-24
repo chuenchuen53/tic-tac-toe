@@ -1,12 +1,12 @@
-import os from "os";
 import path from "path";
 import Piscina from "piscina";
 import { setting } from "./setting";
 import ticTacToeDb from "../../TicTacToeDb";
 import type { DbRow, WorkerData, WorkerResult } from "./typing";
 import DateTimeUtil from "../DateTimeUtil";
+import { envVariables } from "../../envVariables";
 
-const THREADS = os.cpus().length;
+const THREADS = envVariables.THREADS;
 
 const piscina = new Piscina({
   filename: path.resolve(__dirname, "worker.js"),
@@ -20,8 +20,10 @@ async function main() {
 
   await ticTacToeDb.connectToDatabase();
 
+  const generateCase = setting.cases;
+
   const promiseArr: Promise<WorkerResult>[] = [];
-  for (let simulationCase of setting.cases) {
+  for (let simulationCase of generateCase) {
     for (let setNumber = 1; setNumber <= setting.numberOfSet; setNumber++) {
       const workerData: WorkerData = {
         simulationCase,

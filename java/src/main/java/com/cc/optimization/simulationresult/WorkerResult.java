@@ -1,5 +1,6 @@
 package com.cc.optimization.simulationresult;
 
+import com.cc.optimization.SimulationCase;
 import com.cc.tictactoe.GameResultCount;
 import org.bson.Document;
 

@@ -1,6 +1,5 @@
 package com.cc.optimization;
 
-import com.cc.optimization.simulationresult.SimulationCase;
 import com.cc.tictactoe.TicTacToe;
 import com.cc.tictactoe.TicTacToeElement;
 import org.jetbrains.annotations.NotNull;
