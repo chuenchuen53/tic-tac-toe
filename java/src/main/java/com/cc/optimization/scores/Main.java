@@ -7,7 +7,6 @@ import com.cc.tictactoedb.TicTacToeDb;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,14 +22,7 @@ public class Main {
         TicTacToeDb ticTacToeDb = TicTacToeDb.getInstance();
 
         List<int[]> allCombination = EffectiveCombination.getAll();
-//        List<int[]> generateCombination = allCombination.subList(0, 389);
-
-        Random rand = new Random();
-        List<int[]> generateCombination = allCombination.stream()
-                .sorted((a, b) -> rand.nextInt(2) == 0 ? -1 : 1)
-                .limit(THREADS * 2L)
-                .toList();
-
+        List<int[]> generateCombination = allCombination.subList(0, 389);
 
         ExecutorService executor = Executors.newFixedThreadPool(THREADS);
 
