@@ -26,16 +26,18 @@ public class Main {
 
         ExecutorService executor = Executors.newFixedThreadPool(THREADS);
 
-        for (int[] scores : generateCombination) {
-            int loseScore = scores[0];
-            int drawScore = scores[1];
-            int winScore = scores[2];
-            WorkerData workerData = new WorkerData(loseScore, drawScore, winScore, Setting.simulationTimes,
-                    Setting.sampleSize, true);
-            CompletableFuture.supplyAsync(new Worker(workerData), executor).thenApply(x -> {
-                ticTacToeDb.scores.insertOne(x.toDocument());
-                return null;
-            });
+        for (int i = 0; i < 1; i++) {
+            for (int[] scores : generateCombination) {
+                int loseScore = scores[0];
+                int drawScore = scores[1];
+                int winScore = scores[2];
+                WorkerData workerData = new WorkerData(loseScore, drawScore, winScore, Setting.simulationTimes,
+                        Setting.sampleSize, true);
+                CompletableFuture.supplyAsync(new Worker(workerData), executor).thenApply(x -> {
+                    ticTacToeDb.scores.insertOne(x.toDocument());
+                    return null;
+                });
+            }
         }
 
         executor.shutdown();

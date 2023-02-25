@@ -72,8 +72,8 @@ public class Worker implements Supplier<WorkerResult> {
 
     private GameResult resultWithBotStartFirst(TicTacToeSolver solver) {
         TicTacToe ticTacToe = solver.getTicTacToe();
-        GameStatus gameStatus = ticTacToe.getGameStatus();
-        while (gameStatus == GameStatus.IN_PROGRESS) {
+        GameStatus gameStatus;
+        do {
             int[] bestMove = solver.getBestMove();
             ticTacToe.input(bestMove[0], bestMove[1]);
             gameStatus = ticTacToe.getGameStatus();
@@ -83,15 +83,15 @@ public class Worker implements Supplier<WorkerResult> {
                 ticTacToe.input(randomMove[0], randomMove[1]);
                 gameStatus = ticTacToe.getGameStatus();
             }
-        }
+        } while (gameStatus == GameStatus.IN_PROGRESS);
 
         return getBotResultFromGameStatus(gameStatus);
     }
 
     private GameResult resultWithBotStartSecond(TicTacToeSolver solver) {
         TicTacToe ticTacToe = solver.getTicTacToe();
-        GameStatus gameStatus = ticTacToe.getGameStatus();
-        while (gameStatus == GameStatus.IN_PROGRESS) {
+        GameStatus gameStatus;
+        do {
             int[] randomMove = solver.getRandomMove();
             ticTacToe.input(randomMove[0], randomMove[1]);
             gameStatus = ticTacToe.getGameStatus();
@@ -101,7 +101,7 @@ public class Worker implements Supplier<WorkerResult> {
                 ticTacToe.input(bestMove[0], bestMove[1]);
                 gameStatus = ticTacToe.getGameStatus();
             }
-        }
+        } while (gameStatus == GameStatus.IN_PROGRESS);
 
         return getBotResultFromGameStatus(gameStatus);
     }
