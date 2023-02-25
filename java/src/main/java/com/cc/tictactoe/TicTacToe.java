@@ -120,7 +120,6 @@ public class TicTacToe {
         return availableMove;
     }
 
-
     @Nullable
     private TicTacToeElement checkWinner() {
         for (int[][] x : LINES_INDEXES) {

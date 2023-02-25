@@ -47,6 +47,8 @@ public class TicTacToeSolver {
     public int[] getBestMove() {
         if (ticTacToe.getFilled() == 9) {
             throw new RuntimeException("should not call getBestMove when the board is full");
+        } else if (ticTacToe.getFilled() == 8) {
+            return ticTacToe.getAvailableMoves().get(0);
         }
 
         Integer[][] scores = calculateScore();
@@ -95,15 +97,43 @@ public class TicTacToeSolver {
         GameResultCount[][] result = new GameResultCount[TicTacToe.BOARD_SIZE][TicTacToe.BOARD_SIZE];
         TicTacToeElement[][] board = ticTacToe.getBoard();
 
-        for (int row = 0; row < TicTacToe.BOARD_SIZE; row++) {
-            for (int col = 0; col < TicTacToe.BOARD_SIZE; col++) {
-                if (board[row][col] == null) {
-                    GameResultCount gameResultCount = new GameResultCount();
-                    for (int i = 0; i < simulationTimes; i++) {
-                        GameResult gameResult = simulateGame(row, col);
-                        gameResultCount.add(gameResult);
+        if (ticTacToe.getFilled() == 8) {
+            GameResultCount gameResultCount = new GameResultCount();
+            int[] lastMove = ticTacToe.getAvailableMoves().get(0);
+            int row = lastMove[0];
+            int col = lastMove[1];
+            GameResult gameResult = simulateGame(row, col);
+            gameResultCount.add(gameResult, simulationTimes);
+            result[row][col] = gameResultCount;
+        } else if (ticTacToe.getFilled() == 7) {
+            List<int[]> availableMoves = ticTacToe.getAvailableMoves();
+            int[] emptyPosition1 = availableMoves.get(0);
+            int[] emptyPosition2 = availableMoves.get(1);
+            int row1 = emptyPosition1[0];
+            int col1 = emptyPosition1[1];
+            int row2 = emptyPosition2[0];
+            int col2 = emptyPosition2[1];
+
+            GameResultCount gameResultCount1 = new GameResultCount();
+            GameResult gameResult1 = simulateGame(row1, col1);
+            gameResultCount1.add(gameResult1, simulationTimes);
+            result[row1][col1] = gameResultCount1;
+
+            GameResultCount gameResultCount2 = new GameResultCount();
+            GameResult gameResult2 = simulateGame(row2, col2);
+            gameResultCount2.add(gameResult2, simulationTimes);
+            result[row2][col2] = gameResultCount2;
+        } else {
+            for (int row = 0; row < TicTacToe.BOARD_SIZE; row++) {
+                for (int col = 0; col < TicTacToe.BOARD_SIZE; col++) {
+                    if (board[row][col] == null) {
+                        GameResultCount gameResultCount = new GameResultCount();
+                        for (int i = 0; i < simulationTimes; i++) {
+                            GameResult gameResult = simulateGame(row, col);
+                            gameResultCount.add(gameResult);
+                        }
+                        result[row][col] = gameResultCount;
                     }
-                    result[row][col] = gameResultCount;
                 }
             }
         }
@@ -132,8 +162,7 @@ public class TicTacToeSolver {
         }
 
         GameStatus gameStatus = simulatedGame.getGameStatus();
-        TicTacToeElement winner = gameStatus == GameStatus.X_WINS ? TicTacToeElement.X :
-                gameStatus == GameStatus.O_WINS ? TicTacToeElement.O : null;
+        TicTacToeElement winner = TicTacToe.winnerFromGameStatus(gameStatus);
 
         if (winner == null) {
             return GameResult.DRAW;

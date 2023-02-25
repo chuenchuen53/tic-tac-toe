@@ -1,6 +1,7 @@
 package com.cc.tictactoe;
 
 import org.bson.Document;
+import org.jetbrains.annotations.NotNull;
 
 public class GameResultCount {
     private int lose;
@@ -22,11 +23,19 @@ public class GameResultCount {
         return win;
     }
 
-    public void add(GameResult gameResult) {
+    public void add(@NotNull GameResult gameResult) {
         switch (gameResult) {
             case LOSE -> lose++;
             case DRAW -> draw++;
             case WIN -> win++;
+        }
+    }
+    
+    public void add(@NotNull GameResult gameResult, int increment) {
+        switch (gameResult) {
+            case LOSE -> lose += increment;
+            case DRAW -> draw += increment;
+            case WIN -> win += increment;
         }
     }
 
