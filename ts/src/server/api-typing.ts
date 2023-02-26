@@ -1,4 +1,4 @@
-import { GameStatus, TicTacToeElement } from "./typing";
+import { GameStatus, TicTacToeElement } from "../TicTacToe/typing";
 
 export interface GetGameResponse {
   board: (TicTacToeElement | null)[][];

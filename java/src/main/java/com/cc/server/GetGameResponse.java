@@ -3,7 +3,7 @@ package com.cc.server;
 import com.cc.tictactoe.GameStatus;
 import com.cc.tictactoe.TicTacToe;
 import com.cc.tictactoe.TicTacToeElement;
-import com.cc.tictactoe.TicTacToeSolver;
+import com.cc.tictactoesolver.TicTacToeSolver;
 
 public class GetGameResponse {
     public TicTacToeElement[][] board;

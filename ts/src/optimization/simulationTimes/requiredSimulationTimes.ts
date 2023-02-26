@@ -1,6 +1,6 @@
 import CalcUtil from "../../util/CalcUtil";
 import TicTacToeSolver from "../../TicTacToeSolver";
-import { SimulationResult } from "../../typing";
+import { SimulationResult } from "../../TicTacToeSolver/typing";
 import { SimulationCase } from "../constant";
 import { getTicTacToe } from "../boardConfiguration";
 import { WorkerResult } from "./typing";

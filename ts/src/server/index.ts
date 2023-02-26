@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
 import { Request, Response } from "express";
-import { GetGameResponse, InputRequest } from "../api-typing";
-import TicTacToe from "../TicTacToe";
-import { GameStatus, TicTacToeElement } from "../typing";
+import { GetGameResponse, InputRequest } from "./api-typing";
+import TicTacToe from "../TicTacToe/TicTacToe";
+import { GameStatus, TicTacToeElement } from "../TicTacToe/typing";
 import TicTacToeSolver from "../TicTacToeSolver";
 
 const PORT = 8080;

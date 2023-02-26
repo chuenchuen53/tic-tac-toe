@@ -1,12 +1,12 @@
 package com.cc.test;
 
 import com.cc.optimization.BoardConfiguration;
-import com.cc.optimization.Constant;
 import com.cc.optimization.SimulationCase;
+import com.cc.optimization.simulationresult.Setting;
 import com.cc.tictactoe.GameStatus;
 import com.cc.tictactoe.TicTacToe;
 import com.cc.tictactoe.TicTacToeElement;
-import com.cc.tictactoe.TicTacToeSolver;
+import com.cc.tictactoesolver.TicTacToeSolver;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,7 +23,7 @@ public class BoardConfigurationTest {
 
     @Test
     public void getTicTacToeTest() {
-        for (SimulationCase simulationCase : Constant.cases) {
+        for (SimulationCase simulationCase : Setting.cases) {
             TicTacToe ticTacToe = BoardConfiguration.getTicTacToe(simulationCase);
             String boardString = BoardConfiguration.boardToStr(ticTacToe);
             assertThat(boardString, equalTo(BoardConfiguration.boardStrMap.get(simulationCase)));

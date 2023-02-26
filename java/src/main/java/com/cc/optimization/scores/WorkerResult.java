@@ -1,6 +1,6 @@
 package com.cc.optimization.scores;
 
-import com.cc.tictactoe.GameResultCount;
+import com.cc.tictactoesolver.GameResultCount;
 import org.bson.Document;
 
 import java.util.Date;

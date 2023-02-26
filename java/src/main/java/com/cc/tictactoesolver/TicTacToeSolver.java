@@ -1,8 +1,9 @@
-package com.cc.tictactoe;
+package com.cc.tictactoesolver;
 
 import com.cc.optimization.BoardConfiguration;
 import com.cc.optimization.PresetSimulationResult;
 import com.cc.optimization.SimulationCase;
+import com.cc.tictactoe.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

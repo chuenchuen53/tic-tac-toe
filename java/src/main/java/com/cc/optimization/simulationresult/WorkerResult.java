@@ -1,7 +1,7 @@
 package com.cc.optimization.simulationresult;
 
 import com.cc.optimization.SimulationCase;
-import com.cc.tictactoe.GameResultCount;
+import com.cc.tictactoesolver.GameResultCount;
 import org.bson.Document;
 
 import java.util.ArrayList;

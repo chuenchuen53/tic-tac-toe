@@ -1,4 +1,4 @@
-import { SimulationResult } from "../../typing";
+import { SimulationResult } from "../../TicTacToeSolver/typing";
 import { SimulationCase } from "../constant";
 
 export interface WorkerData {

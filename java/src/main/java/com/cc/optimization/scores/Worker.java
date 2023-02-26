@@ -1,7 +1,12 @@
 package com.cc.optimization.scores;
 
 import com.cc.optimization.DateTimeUtil;
-import com.cc.tictactoe.*;
+import com.cc.tictactoe.GameStatus;
+import com.cc.tictactoe.TicTacToe;
+import com.cc.tictactoe.TicTacToeElement;
+import com.cc.tictactoesolver.GameResult;
+import com.cc.tictactoesolver.GameResultCount;
+import com.cc.tictactoesolver.TicTacToeSolver;
 
 import java.util.Date;
 import java.util.function.Supplier;

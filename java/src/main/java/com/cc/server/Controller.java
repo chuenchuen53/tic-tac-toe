@@ -2,7 +2,7 @@ package com.cc.server;
 
 import com.cc.tictactoe.TicTacToe;
 import com.cc.tictactoe.TicTacToeElement;
-import com.cc.tictactoe.TicTacToeSolver;
+import com.cc.tictactoesolver.TicTacToeSolver;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

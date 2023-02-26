@@ -1,5 +1,5 @@
-import TicTacToe from "../TicTacToe";
-import { TicTacToeElement } from "../typing";
+import TicTacToe from "../TicTacToe/TicTacToe";
+import { TicTacToeElement } from "../TicTacToe/typing";
 import type { SimulationCase } from "./constant";
 
 function getInputArr(simulationCase: SimulationCase): number[][] {

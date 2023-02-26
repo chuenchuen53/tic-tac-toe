@@ -6,11 +6,11 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
+    "clear-dev-db": "tsc && node ./build/TicTacToeDb/clearDevDb",
     "cli": "tsc && node ./build/game-in-cli",
     "server": "tsc && node ./build/server",
-    "clear-dev-db": "tsc && node ./build/TicTacToeDb/clearDevDb",
     "op-st": "tsc && node ./build/optimization/simulationTimes",
-    "op-r": "tsc && node ./build/optimization/simulationResult",
+    "op-sr": "tsc && node ./build/optimization/simulationResult",
     "op-s": "tsc && node ./build/optimization/scores",
     "op-ar": "tsc && node ./build/optimization/aggregation/simulationResult",
     "op-as": "tsc && node ./build/optimization/aggregation/scores"

@@ -1,6 +1,6 @@
 package com.cc.optimization;
 
-import com.cc.tictactoe.GameResultCount;
+import com.cc.tictactoesolver.GameResultCount;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;

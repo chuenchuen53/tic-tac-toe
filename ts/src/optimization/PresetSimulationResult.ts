@@ -1,5 +1,5 @@
 import fs from "fs";
-import { SimulationResult } from "../typing";
+import { SimulationResult } from "../TicTacToeSolver/typing";
 import { SimulationCase } from "./constant";
 
 export default class PresetSimulationResult {

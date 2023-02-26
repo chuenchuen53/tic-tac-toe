@@ -1,4 +1,4 @@
-package com.cc.tictactoe;
+package com.cc.tictactoesolver;
 
 public enum GameResult {
     WIN,

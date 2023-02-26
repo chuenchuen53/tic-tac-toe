@@ -3,9 +3,9 @@ package com.cc.optimization.simulationresult;
 import com.cc.optimization.BoardConfiguration;
 import com.cc.optimization.DateTimeUtil;
 import com.cc.optimization.SimulationCase;
-import com.cc.tictactoe.GameResultCount;
 import com.cc.tictactoe.TicTacToe;
-import com.cc.tictactoe.TicTacToeSolver;
+import com.cc.tictactoesolver.GameResultCount;
+import com.cc.tictactoesolver.TicTacToeSolver;
 
 import java.util.Arrays;
 import java.util.Date;

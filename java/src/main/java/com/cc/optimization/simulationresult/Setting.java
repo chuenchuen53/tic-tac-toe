@@ -1,6 +1,8 @@
-package com.cc.optimization;
+package com.cc.optimization.simulationresult;
 
-public class Constant {
+import com.cc.optimization.SimulationCase;
+
+public class Setting {
     public static final int simulationTimes = 1000000;
     public static final int numberOfSet = 5;
     public static final SimulationCase[] cases = {

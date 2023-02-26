@@ -1,6 +1,6 @@
 import fs from "fs";
 import ticTacToeDb from "../../../TicTacToeDb";
-import { GameResult, SimulationResult } from "../../../typing";
+import { GameResult, SimulationResult } from "../../../TicTacToeSolver/typing";
 import { SimulationCase, SIMULATION_CASES } from "../../constant";
 import { DbRow } from "../../simulationResult/typing";
 import { ResultMap as RowMap } from "./typing";

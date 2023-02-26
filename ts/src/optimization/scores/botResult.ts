@@ -1,6 +1,7 @@
-import TicTacToe from "../../TicTacToe";
+import TicTacToe from "../../TicTacToe/TicTacToe";
 import TicTacToeSolver from "../../TicTacToeSolver";
-import { TicTacToeElement, GameStatus, GameResultCount, GameResult } from "../../typing";
+import { GameResultCount, GameResult } from "../../TicTacToeSolver/typing";
+import { TicTacToeElement, GameStatus } from "../../TicTacToe/typing";
 import { FlattenBotResult, WorkerData } from "./typing";
 
 const BOT = TicTacToeElement.X;

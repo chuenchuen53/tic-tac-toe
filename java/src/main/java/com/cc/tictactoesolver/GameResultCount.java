@@ -1,4 +1,4 @@
-package com.cc.tictactoe;
+package com.cc.tictactoesolver;
 
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ public class GameResultCount {
             case WIN -> win++;
         }
     }
-    
+
     public void add(@NotNull GameResult gameResult, int increment) {
         switch (gameResult) {
             case LOSE -> lose += increment;
