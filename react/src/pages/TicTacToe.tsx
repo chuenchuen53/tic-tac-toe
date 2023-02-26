@@ -7,6 +7,7 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { Api, GetGameResponse } from "../api";
 import Loading from "../components/Loading";
+import { Scores } from "../components/Scores";
 
 export const TicTacToe = () => {
   const [game, setGame] = useState<null | GetGameResponse>(null);
@@ -39,6 +40,9 @@ export const TicTacToe = () => {
             <Box sx={{ px: 8 }}>
               <Board board={game.board} gameStatus={game.gameStatus} clickCell={clickCell} />
             </Box>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Scores scores={game.scores} bestMove={game.bestMove} />
           </Box>
           <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }} onClick={getGame}>
             <Button variant="outlined" startIcon={<ReplayIcon />}>

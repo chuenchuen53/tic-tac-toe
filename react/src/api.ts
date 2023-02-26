@@ -6,6 +6,8 @@ export interface GetGameResponse {
   board: Board;
   turn: TicTacToeElement;
   gameStatus: GameStatus;
+  scores: (number | null)[][] | null;
+  bestMove: number[] | null;
 }
 
 export class Api {

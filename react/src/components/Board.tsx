@@ -47,7 +47,7 @@ export const Board = (props: Props) => {
               width: "100px",
               height: "100px",
               fontSize: "2.5rem",
-              bgcolor: inWiningPattern(rowIndex, columnIndex, winningPattern) ? "gold" : "primary.main",
+              bgcolor: inWiningPattern(rowIndex, columnIndex, winningPattern) ? "secondary.main" : "primary.main",
               cursor: canClick(rowIndex, columnIndex) ? "pointer" : "default",
             }}
             onClick={() => handleOnClick(rowIndex, columnIndex)}
