@@ -1,4 +1,4 @@
-import { DbRow } from "../simulationResult/typing";
+import { DbRow } from "../../simulationResult/typing";
 
 export interface ResultMap {
   [key: string]: DbRow[];

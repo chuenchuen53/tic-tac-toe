@@ -11,8 +11,9 @@
     "clear-dev-db": "tsc && node ./build/TicTacToeDb/clearDevDb",
     "op-st": "tsc && node ./build/optimization/simulationTimes",
     "op-r": "tsc && node ./build/optimization/simulationResult",
-    "op-a": "tsc && node ./build/optimization/aggregation",
-    "op-s": "tsc && node ./build/optimization/scores"
+    "op-s": "tsc && node ./build/optimization/scores",
+    "op-ar": "tsc && node ./build/optimization/aggregation/simulationResult",
+    "op-as": "tsc && node ./build/optimization/aggregation/scores"
   },
   "dependencies": {
     "cors": "2.8.5",

@@ -1,7 +1,7 @@
-import ticTacToeDb from "../../TicTacToeDb";
-import { SIMULATION_CASES } from "../constant";
-import { DbRow } from "../simulationResult/typing";
-import { getN, meanAndSdFromResult, ratioFromResult } from "../simulationTimes/requiredSimulationTimes";
+import ticTacToeDb from "../../../TicTacToeDb";
+import { SIMULATION_CASES } from "../../constant";
+import { DbRow } from "../../simulationResult/typing";
+import { getN, meanAndSdFromResult, ratioFromResult } from "../../simulationTimes/requiredSimulationTimes";
 import { ResultMap as RowMap } from "./typing";
 
 const THRESHOLD_FOR_RATIO_DIFF_OF_DIFF_SET = 0.005;
