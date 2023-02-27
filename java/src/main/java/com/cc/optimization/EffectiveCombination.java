@@ -8,18 +8,6 @@ public class EffectiveCombination {
     static final int[] DRAW_SCORES = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     static final int[] WIN_SCORES = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-    private static List<int[]> cartesianProduct() {
-        List<int[]> result = new ArrayList<>();
-        for (int lose : LOSE_SCORES) {
-            for (int draw : DRAW_SCORES) {
-                for (int win : WIN_SCORES) {
-                    result.add(new int[]{lose, draw, win});
-                }
-            }
-        }
-        return result;
-    }
-
     public static List<int[]> getAll() {
         // Filter out the combinations that are not effective:
         // 1. winScore <= drawScore
@@ -27,7 +15,8 @@ public class EffectiveCombination {
         List<int[]> rawProduct = cartesianProduct();
         List<int[]> first = new ArrayList<>();
         for (int[] arr : rawProduct) {
-            int lose = arr[0], draw = arr[1], win = arr[2];
+            int draw = arr[1];
+            int win = arr[2];
             if (win > draw) {
                 first.add(arr);
             }
@@ -51,4 +40,18 @@ public class EffectiveCombination {
 
         return second;
     }
+
+    private static List<int[]> cartesianProduct() {
+        List<int[]> result = new ArrayList<>();
+        for (int lose : LOSE_SCORES) {
+            for (int draw : DRAW_SCORES) {
+                for (int win : WIN_SCORES) {
+                    result.add(new int[]{lose, draw, win});
+                }
+            }
+        }
+        return result;
+    }
+
+
 }

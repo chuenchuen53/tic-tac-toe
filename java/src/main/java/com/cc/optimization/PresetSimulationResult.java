@@ -34,7 +34,7 @@ public class PresetSimulationResult {
     }
 
     @NotNull
-    public static GameResultCount[][] getPresetResult(SimulationCase simulationCase) {
+    public static GameResultCount[][] getPresetResult(@NotNull SimulationCase simulationCase) {
         return data.get(simulationCase);
     }
 }

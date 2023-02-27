@@ -9,7 +9,7 @@ const QUALIFIED_FILE_PATH = "temp-result/qualified-scores-result.csv";
 
 async function main() {
   await tictacToeDb.connect();
-  const allRows: DbRow[] = (await tictacToeDb.scores.find().toArray()) as any;
+  const allRows: DbRow[] = (await tictacToeDb.scores.find().toArray()) as unknown as DbRow[];
   tictacToeDb.close();
 
   console.log("allRows.length", allRows.length);

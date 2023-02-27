@@ -26,7 +26,6 @@ export const effectiveCombination: () => number[][] = () => {
     for (let factor = 2; factor <= min; factor++) {
       if (a % factor === 0 && b % factor === 0 && c % factor === 0) return false;
     }
-
     return true;
   });
   return second;

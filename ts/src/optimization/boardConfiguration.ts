@@ -2,14 +2,6 @@ import TicTacToe from "../TicTacToe/TicTacToe";
 import { TicTacToeElement } from "../TicTacToe/typing";
 import type { SimulationCase } from "./constant";
 
-function getInputArr(simulationCase: SimulationCase): number[][] {
-  if (simulationCase === "empty") return [];
-
-  const oneDIndex = simulationCase.match(/\d/g) || [];
-  const twoDIndex = oneDIndex.map((index) => [Math.floor(Number(index) / 3), Number(index) % 3]);
-  return twoDIndex;
-}
-
 export const boardStrMap: Record<SimulationCase, string> = {
   empty: "EEE-EEE-EEE",
   fill_x0: "XEE-EEE-EEE",
@@ -1102,6 +1094,14 @@ export const boardStrMap: Record<SimulationCase, string> = {
   fill_x7_o4_x8_o6: "EEE-EOE-OXX",
   fill_x7_o5_x8_o6: "EEE-EEO-OXX",
 };
+
+function getInputArr(simulationCase: SimulationCase): number[][] {
+  if (simulationCase === "empty") return [];
+
+  const oneDIndex = simulationCase.match(/\d/g) || [];
+  const twoDIndex = oneDIndex.map((index) => [Math.floor(Number(index) / 3), Number(index) % 3]);
+  return twoDIndex;
+}
 
 export function boardToStr(x: TicTacToe) {
   return x

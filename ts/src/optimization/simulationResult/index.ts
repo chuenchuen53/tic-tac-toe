@@ -24,7 +24,7 @@ async function main() {
 
   const promiseArr: Promise<WorkerResult>[] = [];
   for (const simulationCase of generateCase) {
-    for (let setNumber = 1; setNumber <= setting.numberOfSet; setNumber++) {
+    for (let setNumber = 0; setNumber < setting.numberOfSet; setNumber++) {
       const workerData: WorkerData = {
         simulationCase,
         simulationTimes: setting.simulationTimes,

@@ -1105,7 +1105,7 @@ public class BoardConfiguration {
         put(SimulationCase.FILL_X7_O5_X8_O6, "EEE-EEO-OXX");
     }};
 
-    public static String boardToStr(TicTacToe x) {
+    public static String boardToStr(@NotNull TicTacToe x) {
         return Arrays.stream(x.getBoard())
                 .map(row -> Arrays.stream(row)
                         .map(e -> e == TicTacToeElement.X ? "X" : e == TicTacToeElement.O ? "O" : "E")
@@ -1113,7 +1113,7 @@ public class BoardConfiguration {
                 .collect(Collectors.joining("-"));
     }
 
-    public static String boardToStrInvertXO(TicTacToe x) {
+    public static String boardToStrInvertXO(@NotNull TicTacToe x) {
         return Arrays.stream(x.getBoard())
                 .map(row -> Arrays.stream(row)
                         .map(e -> e == TicTacToeElement.X ? "O" : e == TicTacToeElement.O ? "X" : "E")
@@ -1131,7 +1131,7 @@ public class BoardConfiguration {
     }
 
     @Nullable
-    public static SimulationCase getMatchCase(TicTacToe ticTacToe) {
+    public static SimulationCase getMatchCase(@NotNull TicTacToe ticTacToe) {
         if (ticTacToe.getFilled() < 5) {
             if (ticTacToe.getStartTurn() == x) {
                 String str = boardToStr(ticTacToe);
@@ -1149,7 +1149,7 @@ public class BoardConfiguration {
         return null;
     }
 
-    public static int[][] getInputArr(SimulationCase simulationCase) {
+    private static int[][] getInputArr(@NotNull SimulationCase simulationCase) {
         String value = simulationCase.value;
         if (value.equals("empty")) {
             return new int[0][0];

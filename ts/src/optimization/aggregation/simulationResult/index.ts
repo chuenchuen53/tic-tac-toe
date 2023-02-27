@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import fs from "fs";
 import ticTacToeDb from "../../../TicTacToeDb";
 import { GameResult, SimulationResult } from "../../../TicTacToeSolver/typing";
