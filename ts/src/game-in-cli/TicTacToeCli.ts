@@ -1,6 +1,6 @@
-import { scanner } from "./Scanner";
 import TicTacToe from "../TicTacToe/TicTacToe";
 import { TicTacToeElement, GameStatus } from "../TicTacToe/typing";
+import { scanner } from "./Scanner";
 
 export class TicTacToeCli extends TicTacToe {
   constructor(turn: TicTacToeElement) {
@@ -11,8 +11,9 @@ export class TicTacToeCli extends TicTacToe {
     const board = this.getBoard();
     const rowSeparator = "--+---+--";
     for (let i = 0; i < board.length; i++) {
-      let row: string = "";
+      let row = "";
       for (let j = 0; j < board[i].length; j++) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         row += board[i][j] === null ? " " : board[i][j]!.toString();
         if (j < board[i].length - 1) {
           row += " | ";
@@ -68,12 +69,13 @@ export class TicTacToeCli extends TicTacToe {
     try {
       const response: string = await scanner.next("Play again? (y/n) ");
       switch (response) {
-        case "y":
+        case "y": {
           const newTurn: TicTacToeElement =
             this.getStartTurn() == TicTacToeElement.X ? TicTacToeElement.O : TicTacToeElement.X;
           this.resetBoard(newTurn);
           console.log(`New game started with ${newTurn} first`);
           return true;
+        }
         case "n":
           return false;
         default:

@@ -1,5 +1,5 @@
-import ticTacToeDb from ".";
 import { envVariables } from "../envVariables";
+import ticTacToeDb from ".";
 
 if (envVariables.ENV === "prod") throw new Error("This script is only for development.");
 

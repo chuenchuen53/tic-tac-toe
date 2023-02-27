@@ -2,8 +2,8 @@ import { getMatchCase } from "../optimization/boardConfiguration";
 import { SimulationCase } from "../optimization/constant";
 import PresetSimulationResult from "../optimization/PresetSimulationResult";
 import TicTacToe from "../TicTacToe/TicTacToe";
-import { GameResult, SimulationResult, GameResultCount } from "./typing";
 import { GameStatus } from "../TicTacToe/typing";
+import { GameResult, SimulationResult, GameResultCount } from "./typing";
 
 export default class TicTacToeSolver {
   private readonly loseScore: number;

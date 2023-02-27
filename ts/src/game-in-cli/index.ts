@@ -1,11 +1,12 @@
+import { TicTacToeElement } from "../TicTacToe/typing";
 import { scanner } from "./Scanner";
 import { TicTacToeCli } from "./TicTacToeCli";
-import { TicTacToeElement } from "../TicTacToe/typing";
 
 class Main {
   static game: TicTacToeCli = new TicTacToeCli(TicTacToeElement.X);
 
   static async run(): Promise<void> {
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       await this.playGame();
       if (!(await this.game.resetBoardFromCli())) {

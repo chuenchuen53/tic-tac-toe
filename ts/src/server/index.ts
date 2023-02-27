@@ -1,10 +1,9 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
-import { Request, Response } from "express";
-import { GetGameResponse, InputRequest } from "./api-typing";
 import TicTacToe from "../TicTacToe/TicTacToe";
 import { GameStatus, TicTacToeElement } from "../TicTacToe/typing";
 import TicTacToeSolver from "../TicTacToeSolver";
+import { GetGameResponse, InputRequest } from "./api-typing";
 
 const PORT = 8080;
 const CORS_OPTIONS = Object.freeze({

@@ -13,6 +13,13 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["@typescript-eslint"],
+  settings: {
+    "import/resolver": {
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+    },
+  },
   rules: {
     quotes: [
       "warn",
@@ -38,5 +45,7 @@ module.exports = {
         groups: ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
       },
     ],
+    "no-empty-function": "off",
+    "@typescript-eslint/no-empty-function": ["error", { allow: ["private-constructors"] }],
   },
 };

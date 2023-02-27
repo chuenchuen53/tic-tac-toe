@@ -1119,7 +1119,7 @@ export function boardToStrInvertXO(x: TicTacToe) {
 
 export function getTicTacToe(simulationCase: SimulationCase): TicTacToe {
   const x = TicTacToeElement.X;
-  let r = new TicTacToe(x);
+  const r = new TicTacToe(x);
   for (const [row, col] of getInputArr(simulationCase)) {
     r.input(row, col);
   }
