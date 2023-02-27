@@ -1,4 +1,4 @@
-import TicTacToe from "../TicTacToe/TicTacToe";
+import TicTacToe from "../TicTacToe";
 import { TicTacToeElement } from "../TicTacToe/typing";
 import type { SimulationCase } from "./constant";
 

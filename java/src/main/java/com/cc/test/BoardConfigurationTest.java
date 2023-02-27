@@ -7,6 +7,8 @@ import com.cc.tictactoe.GameStatus;
 import com.cc.tictactoe.TicTacToe;
 import com.cc.tictactoe.TicTacToeElement;
 import com.cc.tictactoesolver.TicTacToeSolver;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,188 +33,10 @@ public class BoardConfigurationTest {
     }
 
     @Test
-    public void matchCaseInput1() {
+    public void matchCaseTest() {
         for (int i = 0; i < sampleSize; i++) {
-            TicTacToe xStartFirst = new TicTacToe(TicTacToeElement.X);
-            TicTacToeSolver xStartFirstSolver = new TicTacToeSolver(
-                    dummyLoseScore,
-                    dummyDrawScore,
-                    dummyWinScore,
-                    dummySimulationTimes,
-                    xStartFirst
-            );
-            int[] xStartFirstMove = xStartFirstSolver.getRandomMove();
-            xStartFirst.input(xStartFirstMove[0], xStartFirstMove[1]);
-            xStartFirstSolver.updateMatchCase();
-
-            String expectedKeyForXStartFirst = getOneMoveKey(xStartFirstMove[0], xStartFirstMove[1]);
-            assertThat(BoardConfiguration.getMatchCase(xStartFirst).name(), equalTo(expectedKeyForXStartFirst));
-            assertThat(xStartFirstSolver.getMatchCase().name(), equalTo(expectedKeyForXStartFirst));
-
-            TicTacToe oStartFirst = new TicTacToe(TicTacToeElement.O);
-            TicTacToeSolver oStartFirstSolver = new TicTacToeSolver(
-                    dummyLoseScore,
-                    dummyDrawScore,
-                    dummyWinScore,
-                    dummySimulationTimes,
-                    oStartFirst
-            );
-            int[] oStartFirstMove = oStartFirstSolver.getRandomMove();
-            oStartFirst.input(oStartFirstMove[0], oStartFirstMove[1]);
-            oStartFirstSolver.updateMatchCase();
-
-            String expectedKeyForOStartFirst = getOneMoveKey(oStartFirstMove[0], oStartFirstMove[1]);
-            assertThat(BoardConfiguration.getMatchCase(oStartFirst).name(), equalTo(expectedKeyForOStartFirst));
-            assertThat(oStartFirstSolver.getMatchCase().name(), equalTo(expectedKeyForOStartFirst));
-        }
-    }
-
-    @Test
-    public void matchCaseInput2() {
-        for (int i = 0; i < sampleSize; i++) {
-            TicTacToe xStartFirst = new TicTacToe(TicTacToeElement.X);
-            TicTacToeSolver xStartFirstSolver = new TicTacToeSolver(
-                    dummyLoseScore,
-                    dummyDrawScore,
-                    dummyWinScore,
-                    dummySimulationTimes,
-                    xStartFirst
-            );
-            int[] xStartFirstMove = xStartFirstSolver.getRandomMove();
-            xStartFirst.input(xStartFirstMove[0], xStartFirstMove[1]);
-            int[] xStartFirstMove2 = xStartFirstSolver.getRandomMove();
-            xStartFirst.input(xStartFirstMove2[0], xStartFirstMove2[1]);
-            xStartFirstSolver.updateMatchCase();
-
-            String expectedKeyForXStartFirst = getTwoMoveKey(xStartFirstMove[0], xStartFirstMove[1],
-                    xStartFirstMove2[0], xStartFirstMove2[1]);
-            assertThat(BoardConfiguration.getMatchCase(xStartFirst).name(), equalTo(expectedKeyForXStartFirst));
-            assertThat(xStartFirstSolver.getMatchCase().name(), equalTo(expectedKeyForXStartFirst));
-
-            TicTacToe oStartFirst = new TicTacToe(TicTacToeElement.O);
-            TicTacToeSolver oStartFirstSolver = new TicTacToeSolver(
-                    dummyLoseScore,
-                    dummyDrawScore,
-                    dummyWinScore,
-                    dummySimulationTimes,
-                    oStartFirst
-            );
-            int[] oStartFirstMove = oStartFirstSolver.getRandomMove();
-            oStartFirst.input(oStartFirstMove[0], oStartFirstMove[1]);
-            int[] oStartFirstMove2 = oStartFirstSolver.getRandomMove();
-            oStartFirst.input(oStartFirstMove2[0], oStartFirstMove2[1]);
-            oStartFirstSolver.updateMatchCase();
-
-            String expectedKeyForOStartFirst = getTwoMoveKey(oStartFirstMove[0], oStartFirstMove[1],
-                    oStartFirstMove2[0], oStartFirstMove2[1]);
-            assertThat(BoardConfiguration.getMatchCase(oStartFirst).name(), equalTo(expectedKeyForOStartFirst));
-            assertThat(oStartFirstSolver.getMatchCase().name(), equalTo(expectedKeyForOStartFirst));
-        }
-    }
-
-    @Test
-    public void matchCaseInput3() {
-        for (int i = 0; i < sampleSize; i++) {
-            TicTacToe xStartFirst = new TicTacToe(TicTacToeElement.X);
-            TicTacToeSolver xStartFirstSolver = new TicTacToeSolver(
-                    dummyLoseScore,
-                    dummyDrawScore,
-                    dummyWinScore,
-                    dummySimulationTimes,
-                    xStartFirst
-            );
-            int[] xStartFirstMove = xStartFirstSolver.getRandomMove();
-            xStartFirst.input(xStartFirstMove[0], xStartFirstMove[1]);
-            int[] xStartFirstMove2 = xStartFirstSolver.getRandomMove();
-            xStartFirst.input(xStartFirstMove2[0], xStartFirstMove2[1]);
-            int[] xStartFirstMove3 = xStartFirstSolver.getRandomMove();
-            xStartFirst.input(xStartFirstMove3[0], xStartFirstMove3[1]);
-            xStartFirstSolver.updateMatchCase();
-
-            String expectedKeyForXStartFirst = getThreeMoveKey(
-                    xStartFirstMove[0], xStartFirstMove[1],
-                    xStartFirstMove2[0], xStartFirstMove2[1],
-                    xStartFirstMove3[0], xStartFirstMove3[1]);
-            assertThat(BoardConfiguration.getMatchCase(xStartFirst).name(), equalTo(expectedKeyForXStartFirst));
-            assertThat(xStartFirstSolver.getMatchCase().name(), equalTo(expectedKeyForXStartFirst));
-
-            TicTacToe oStartFirst = new TicTacToe(TicTacToeElement.O);
-            TicTacToeSolver oStartFirstSolver = new TicTacToeSolver(
-                    dummyLoseScore,
-                    dummyDrawScore,
-                    dummyWinScore,
-                    dummySimulationTimes,
-                    oStartFirst
-            );
-            int[] oStartFirstMove = oStartFirstSolver.getRandomMove();
-            oStartFirst.input(oStartFirstMove[0], oStartFirstMove[1]);
-            int[] oStartFirstMove2 = oStartFirstSolver.getRandomMove();
-            oStartFirst.input(oStartFirstMove2[0], oStartFirstMove2[1]);
-            int[] oStartFirstMove3 = oStartFirstSolver.getRandomMove();
-            oStartFirst.input(oStartFirstMove3[0], oStartFirstMove3[1]);
-            oStartFirstSolver.updateMatchCase();
-
-            String expectedKeyForOStartFirst = getThreeMoveKey(oStartFirstMove[0], oStartFirstMove[1],
-                    oStartFirstMove2[0], oStartFirstMove2[1],
-                    oStartFirstMove3[0], oStartFirstMove3[1]);
-            assertThat(BoardConfiguration.getMatchCase(oStartFirst).name(), equalTo(expectedKeyForOStartFirst));
-            assertThat(oStartFirstSolver.getMatchCase().name(), equalTo(expectedKeyForOStartFirst));
-        }
-    }
-
-    @Test
-    public void matchCaseInput4() {
-        for (int i = 0; i < sampleSize; i++) {
-            TicTacToe xStartFirst = new TicTacToe(TicTacToeElement.X);
-            TicTacToeSolver xStartFirstSolver = new TicTacToeSolver(
-                    dummyLoseScore,
-                    dummyDrawScore,
-                    dummyWinScore,
-                    dummySimulationTimes,
-                    xStartFirst
-            );
-            int[] xStartFirstMove = xStartFirstSolver.getRandomMove();
-            xStartFirst.input(xStartFirstMove[0], xStartFirstMove[1]);
-            int[] xStartFirstMove2 = xStartFirstSolver.getRandomMove();
-            xStartFirst.input(xStartFirstMove2[0], xStartFirstMove2[1]);
-            int[] xStartFirstMove3 = xStartFirstSolver.getRandomMove();
-            xStartFirst.input(xStartFirstMove3[0], xStartFirstMove3[1]);
-            int[] xStartFirstMove4 = xStartFirstSolver.getRandomMove();
-            xStartFirst.input(xStartFirstMove4[0], xStartFirstMove4[1]);
-            xStartFirstSolver.updateMatchCase();
-
-            String expectedKeyForXStartFirst = getFourMoveKey(
-                    xStartFirstMove[0], xStartFirstMove[1],
-                    xStartFirstMove2[0], xStartFirstMove2[1],
-                    xStartFirstMove3[0], xStartFirstMove3[1],
-                    xStartFirstMove4[0], xStartFirstMove4[1]);
-            assertThat(BoardConfiguration.getMatchCase(xStartFirst).name(), equalTo(expectedKeyForXStartFirst));
-            assertThat(xStartFirstSolver.getMatchCase().name(), equalTo(expectedKeyForXStartFirst));
-
-            TicTacToe oStartFirst = new TicTacToe(TicTacToeElement.O);
-            TicTacToeSolver oStartFirstSolver = new TicTacToeSolver(
-                    dummyLoseScore,
-                    dummyDrawScore,
-                    dummyWinScore,
-                    dummySimulationTimes,
-                    oStartFirst
-            );
-            int[] oStartFirstMove = oStartFirstSolver.getRandomMove();
-            oStartFirst.input(oStartFirstMove[0], oStartFirstMove[1]);
-            int[] oStartFirstMove2 = oStartFirstSolver.getRandomMove();
-            oStartFirst.input(oStartFirstMove2[0], oStartFirstMove2[1]);
-            int[] oStartFirstMove3 = oStartFirstSolver.getRandomMove();
-            oStartFirst.input(oStartFirstMove3[0], oStartFirstMove3[1]);
-            int[] oStartFirstMove4 = oStartFirstSolver.getRandomMove();
-            oStartFirst.input(oStartFirstMove4[0], oStartFirstMove4[1]);
-            oStartFirstSolver.updateMatchCase();
-
-            String expectedKeyForOStartFirst = getFourMoveKey(oStartFirstMove[0], oStartFirstMove[1],
-                    oStartFirstMove2[0], oStartFirstMove2[1],
-                    oStartFirstMove3[0], oStartFirstMove3[1],
-                    oStartFirstMove4[0], oStartFirstMove4[1]);
-            assertThat(BoardConfiguration.getMatchCase(oStartFirst).name(), equalTo(expectedKeyForOStartFirst));
-            assertThat(oStartFirstSolver.getMatchCase().name(), equalTo(expectedKeyForOStartFirst));
+            matchCaseTest(TicTacToeElement.X);
+            matchCaseTest(TicTacToeElement.O);
         }
     }
 
@@ -232,6 +56,8 @@ public class BoardConfigurationTest {
                 if (xStartFirst.getGameStatus() == GameStatus.IN_PROGRESS) {
                     int[] randomMove = xStartFirstSolver.getRandomMove();
                     xStartFirst.input(randomMove[0], randomMove[1]);
+                } else {
+                    break;
                 }
             }
 
@@ -251,6 +77,8 @@ public class BoardConfigurationTest {
                 if (oStartFirst.getGameStatus() == GameStatus.IN_PROGRESS) {
                     int[] randomMove = oStartFirstSolver.getRandomMove();
                     oStartFirst.input(randomMove[0], randomMove[1]);
+                } else {
+                    break;
                 }
             }
 
@@ -264,14 +92,18 @@ public class BoardConfigurationTest {
         return row * 3 + col;
     }
 
+    @Contract(pure = true)
+    @NotNull
     private String getOneMoveKey(int row, int col) {
         return "FILL_X" + to1DIndex(row, col);
     }
 
+    @NotNull
     private String getTwoMoveKey(int row1, int col1, int row2, int col2) {
         return "FILL_X" + to1DIndex(row1, col1) + "_O" + to1DIndex(row2, col2);
     }
 
+    @NotNull
     private String getThreeMoveKey(int row1, int col1, int row2, int col2, int row3, int col3) {
         int i1 = to1DIndex(row1, col1);
         int i3 = to1DIndex(row3, col3);
@@ -283,6 +115,7 @@ public class BoardConfigurationTest {
         }
     }
 
+    @NotNull
     private String getFourMoveKey(int row1, int col1, int row2, int col2, int row3, int col3, int row4, int col4) {
         int i1 = to1DIndex(row1, col1);
         int i2 = to1DIndex(row2, col2);
@@ -299,5 +132,42 @@ public class BoardConfigurationTest {
 
     private int randomInt(int min, int max) {
         return (int) (Math.random() * (max - min)) + min;
+    }
+
+    private void matchCaseTest(TicTacToeElement startTurn) {
+        TicTacToe ticTacToe = new TicTacToe(startTurn);
+        TicTacToeSolver solver = new TicTacToeSolver(dummyLoseScore, dummyDrawScore, dummyWinScore,
+                dummySimulationTimes, ticTacToe);
+        assertThat(BoardConfiguration.getMatchCase(ticTacToe), equalTo(SimulationCase.EMPTY));
+        assertThat(solver.getMatchCase(), equalTo(SimulationCase.EMPTY));
+
+        int[] move1 = solver.getRandomMove();
+        ticTacToe.input(move1[0], move1[1]);
+        solver.updateMatchCase();
+        String expected1 = getOneMoveKey(move1[0], move1[1]);
+        assertThat(BoardConfiguration.getMatchCase(ticTacToe).toString(), equalTo(expected1));
+        assertThat(solver.getMatchCase().toString(), equalTo(expected1));
+
+        int[] move2 = solver.getRandomMove();
+        ticTacToe.input(move2[0], move2[1]);
+        solver.updateMatchCase();
+        String expected2 = getTwoMoveKey(move1[0], move1[1], move2[0], move2[1]);
+        assertThat(BoardConfiguration.getMatchCase(ticTacToe).toString(), equalTo(expected2));
+        assertThat(solver.getMatchCase().toString(), equalTo(expected2));
+
+        int[] move3 = solver.getRandomMove();
+        ticTacToe.input(move3[0], move3[1]);
+        solver.updateMatchCase();
+        String expected3 = getThreeMoveKey(move1[0], move1[1], move2[0], move2[1], move3[0], move3[1]);
+        assertThat(BoardConfiguration.getMatchCase(ticTacToe).toString(), equalTo(expected3));
+        assertThat(solver.getMatchCase().toString(), equalTo(expected3));
+
+        int[] move4 = solver.getRandomMove();
+        ticTacToe.input(move4[0], move4[1]);
+        solver.updateMatchCase();
+        String expected4 = getFourMoveKey(move1[0], move1[1], move2[0], move2[1], move3[0], move3[1], move4[0],
+                move4[1]);
+        assertThat(BoardConfiguration.getMatchCase(ticTacToe).toString(), equalTo(expected4));
+        assertThat(solver.getMatchCase().toString(), equalTo(expected4));
     }
 }

@@ -1,4 +1,4 @@
-import TicTacToe from "../../TicTacToe/TicTacToe";
+import TicTacToe from "../../TicTacToe";
 import TicTacToeSolver from "../../TicTacToeSolver";
 import { GameResultCount, GameResult } from "../../TicTacToeSolver/typing";
 import { TicTacToeElement, GameStatus } from "../../TicTacToe/typing";

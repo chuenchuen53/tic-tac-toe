@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import TicTacToe from "../TicTacToe/TicTacToe";
+import TicTacToe from "../TicTacToe";
 import { TicTacToeElement } from "../TicTacToe/typing";
 import TicTacToeSolver from "../TicTacToeSolver";
 import { InputRequest } from "./api-typing";

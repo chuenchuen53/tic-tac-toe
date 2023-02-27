@@ -1,7 +1,7 @@
 import { getMatchCase } from "../optimization/boardConfiguration";
 import { SimulationCase } from "../optimization/constant";
 import PresetSimulationResult from "../optimization/PresetSimulationResult";
-import TicTacToe from "../TicTacToe/TicTacToe";
+import TicTacToe from "../TicTacToe";
 import { GameStatus } from "../TicTacToe/typing";
 import gameResultCountFactory from "./gameResultCountFactory";
 import { GameResult, SimulationResult } from "./typing";

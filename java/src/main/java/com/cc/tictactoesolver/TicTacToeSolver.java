@@ -7,6 +7,7 @@ import com.cc.tictactoe.GameStatus;
 import com.cc.tictactoe.TicTacToe;
 import com.cc.tictactoe.TicTacToeElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -35,6 +36,7 @@ public class TicTacToeSolver {
         return ticTacToe;
     }
 
+    @Nullable
     public SimulationCase getMatchCase() {
         return matchCase;
     }
