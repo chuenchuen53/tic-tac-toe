@@ -39,16 +39,16 @@ public class GameResultCount {
         }
     }
 
-    @Override
-    public String toString() {
-        return toDocument().toJson();
-    }
-
     public Document toDocument() {
         Document doc = new Document();
         doc.append("lose", lose);
         doc.append("draw", draw);
         doc.append("win", win);
         return doc;
+    }
+
+    @Override
+    public String toString() {
+        return toDocument().toJson();
     }
 }

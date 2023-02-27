@@ -10,21 +10,21 @@ const UPPERCASE_KEY_FILE_PATH = "temp-result/aggregation-uppercase-key.json";
 const THRESHOLD_FOR_SIMILAR_POSITION = 0.005;
 
 async function main() {
-  await ticTacToeDb.connectToDatabase();
+  await ticTacToeDb.connect();
 
-  const allRows = (await ticTacToeDb.collections.simulationResult.find().toArray()) as unknown as DbRow[];
+  const allRows = (await ticTacToeDb.simulationResult.find().toArray()) as unknown as DbRow[];
   console.log("allRows.length", allRows.length);
-  ticTacToeDb.client.close();
+  ticTacToeDb.close();
 
   const rowMap: RowMap = {};
-  for (let simulationCase of SIMULATION_CASES) {
+  for (const simulationCase of SIMULATION_CASES) {
     const result = allRows.filter((result) => result.simulationCase === simulationCase);
     rowMap[simulationCase] = result;
   }
 
   const aggregationMap: Record<string, SimulationResult> = {};
 
-  for (let simulationCase of SIMULATION_CASES) {
+  for (const simulationCase of SIMULATION_CASES) {
     const rows = rowMap[simulationCase];
     const allResult = rows.map((row) => row.result);
     const aggregatedResult = allResult[0];
@@ -43,12 +43,12 @@ async function main() {
   }
 
   const output: Record<string, SimulationResult> = {};
-  for (let simulationCase of SIMULATION_CASES) {
+  for (const simulationCase of SIMULATION_CASES) {
     output[simulationCase] = makeEquivalentPositionSameResult(aggregationMap, simulationCase);
   }
 
   const uppercaseOutput: Record<string, SimulationResult> = {};
-  for (let key in output) {
+  for (const key in output) {
     uppercaseOutput[key.toUpperCase()] = output[key];
   }
 

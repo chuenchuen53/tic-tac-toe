@@ -8,14 +8,14 @@ const ALL_FILE_PATH = "temp-result/aggregated-scores-result.csv";
 const QUALIFIED_FILE_PATH = "temp-result/qualified-scores-result.csv";
 
 async function main() {
-  await tictacToeDb.connectToDatabase();
-  const allRows: DbRow[] = (await tictacToeDb.collections.scores.find().toArray()) as any;
-  tictacToeDb.client.close();
+  await tictacToeDb.connect();
+  const allRows: DbRow[] = (await tictacToeDb.scores.find().toArray()) as any;
+  tictacToeDb.close();
 
   console.log("allRows.length", allRows.length);
 
   const aggregatedRows: AggregatedRow[] = [];
-  for (let row of allRows) {
+  for (const row of allRows) {
     let aggregatedRow = aggregatedRows.find(
       (r) => r.loseScore === row.loseScore && r.drawScore === row.drawScore && r.winScore === row.winScore
     );

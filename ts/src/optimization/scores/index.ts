@@ -1,11 +1,11 @@
 import path from "path";
 import Piscina from "piscina";
 import ticTacToeDb from "../../TicTacToeDb";
-import type { DbRow, WorkerData, WorkerResult } from "./typing";
 import { effectiveCombination } from "../effectiveCombination";
-import { setting } from "./settings";
 import DateTimeUtil from "../DateTimeUtil";
 import { envVariables } from "../../envVariables";
+import { setting } from "./settings";
+import type { DbRow, WorkerData, WorkerResult } from "./typing";
 
 const THREADS = envVariables.THREADS;
 
@@ -19,7 +19,7 @@ async function main() {
   const start = new Date();
   console.log(`${DateTimeUtil.formatDate(start)} start main()`);
 
-  await ticTacToeDb.connectToDatabase();
+  await ticTacToeDb.connect();
 
   const allCombination = effectiveCombination();
   const generateCombination = allCombination.slice(0, 389);
@@ -38,14 +38,14 @@ async function main() {
     };
     const promise = piscina.run(workerData).then(async (result: WorkerResult) => {
       const dbRow: DbRow = { ...result, createdAt: new Date() };
-      await ticTacToeDb.collections.scores.insertOne(dbRow);
+      await ticTacToeDb.scores.insertOne(dbRow);
     });
     promiseArr.push(promise);
   }
 
   await Promise.all(promiseArr);
 
-  await ticTacToeDb.client.close();
+  await ticTacToeDb.close();
 
   const end = new Date();
   console.log(

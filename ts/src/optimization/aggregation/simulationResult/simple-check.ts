@@ -7,27 +7,27 @@ import { ResultMap as RowMap } from "./typing";
 const THRESHOLD_FOR_RATIO_DIFF_OF_DIFF_SET = 0.005;
 
 async function main() {
-  await ticTacToeDb.connectToDatabase();
+  await ticTacToeDb.connect();
 
-  const allRows = (await ticTacToeDb.collections.simulationResult.find().toArray()) as unknown as DbRow[];
+  const allRows = (await ticTacToeDb.simulationResult.find().toArray()) as unknown as DbRow[];
   console.log("allRows.length", allRows.length);
 
   const rowMap: RowMap = {};
-  for (let simulationCase of SIMULATION_CASES) {
+  for (const simulationCase of SIMULATION_CASES) {
     const result = allRows.filter((result) => result.simulationCase === simulationCase);
     rowMap[simulationCase] = result;
   }
 
   const ratioMap: Record<string, ReturnType<typeof ratioFromResult>> = {};
-  for (let simulationCase of SIMULATION_CASES) {
+  for (const simulationCase of SIMULATION_CASES) {
     const rows = rowMap[simulationCase];
     const allResult = rows.map((row) => row.result);
     ratioMap[simulationCase] = ratioFromResult(allResult, rows[0].simulationTimes);
   }
 
-  for (let simulationCase of SIMULATION_CASES) {
+  for (const simulationCase of SIMULATION_CASES) {
     const ratioArr = ratioMap[simulationCase].flat();
-    for (let cell of ratioArr) {
+    for (const cell of ratioArr) {
       const loseArr = cell.lose.sort((a, b) => a - b);
       const drawArr = cell.draw.sort((a, b) => a - b);
       const winArr = cell.win.sort((a, b) => a - b);
@@ -58,7 +58,7 @@ async function main() {
   }
 
   const meanAndSdMap: Record<string, ReturnType<typeof meanAndSdFromResult>> = {};
-  for (let simulationCase of SIMULATION_CASES) {
+  for (const simulationCase of SIMULATION_CASES) {
     const ratioArr = ratioMap[simulationCase];
     meanAndSdMap[simulationCase] = meanAndSdFromResult(ratioArr);
   }
@@ -72,7 +72,7 @@ async function main() {
       win: (number | null)[][];
     }
   > = {};
-  for (let simulationCase of SIMULATION_CASES) {
+  for (const simulationCase of SIMULATION_CASES) {
     const meanAndSdArr = meanAndSdMap[simulationCase];
     const NValues = {
       lose: meanAndSdArr.map((row) => row.map((cell) => (cell === null ? null : getN(cell.lose, precision)))),
@@ -83,7 +83,7 @@ async function main() {
   }
 
   const maxNMap: Record<string, number> = {};
-  for (let simulationCase of SIMULATION_CASES) {
+  for (const simulationCase of SIMULATION_CASES) {
     const NValues = NValuesMap[simulationCase];
     const maxN = Math.max(
       ...NValues.lose.map((row) => Math.max(...row.map((cell) => cell ?? 0))),
@@ -96,7 +96,7 @@ async function main() {
   0 && console.log(JSON.stringify(meanAndSdMap));
   console.log(JSON.stringify(maxNMap, null, 2));
 
-  ticTacToeDb.client.close();
+  ticTacToeDb.close();
 }
 
 main();

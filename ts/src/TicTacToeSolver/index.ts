@@ -3,7 +3,8 @@ import { SimulationCase } from "../optimization/constant";
 import PresetSimulationResult from "../optimization/PresetSimulationResult";
 import TicTacToe from "../TicTacToe/TicTacToe";
 import { GameStatus } from "../TicTacToe/typing";
-import { GameResult, SimulationResult, GameResultCount } from "./typing";
+import gameResultCountFactory from "./gameResultCountFactory";
+import { GameResult, SimulationResult } from "./typing";
 
 export default class TicTacToeSolver {
   private readonly loseScore: number;
@@ -42,6 +43,8 @@ export default class TicTacToeSolver {
   public getBestMove(): number[] {
     if (this.ticTacToe.getFilled() === 9) {
       throw new Error("should not call getBestMove when the board is full");
+    } else if (this.ticTacToe.getFilled() === 8) {
+      return this.ticTacToe.getAvailableMoves()[0];
     }
 
     const scores: (number | null)[][] = this.calculateScores();
@@ -53,8 +56,8 @@ export default class TicTacToeSolver {
         const score = scores[row][col];
         if (score === null) continue;
         if (score > maxScore) {
-          bestMove = [row, col];
           maxScore = score;
+          bestMove = [row, col];
         } else if (score === maxScore && Math.random() > 0.5) {
           bestMove = [row, col];
         }
@@ -98,19 +101,43 @@ export default class TicTacToeSolver {
     ];
     const board = this.ticTacToe.getBoard();
 
-    for (let row = 0; row < TicTacToe.BOARD_SIZE; row++) {
-      for (let col = 0; col < TicTacToe.BOARD_SIZE; col++) {
-        if (board[row][col] === null) {
-          const gameResultCount: GameResultCount = {
-            lose: 0,
-            draw: 0,
-            win: 0,
-          };
-          for (let i = 0; i < this.simulationTimes; i++) {
-            const gameResult = this.simulateGame(row, col);
-            gameResultCount[gameResult]++;
+    if (this.ticTacToe.getFilled() === 8) {
+      const gameResultCount = gameResultCountFactory();
+      const lastMove = this.ticTacToe.getAvailableMoves()[0];
+      const row = lastMove[0];
+      const col = lastMove[1];
+      const gameResult = this.simulateGame(row, col);
+      gameResultCount[gameResult]++;
+      result[row][col] = gameResultCount;
+    } else if (this.ticTacToe.getFilled() === 7) {
+      const availableMoves = this.ticTacToe.getAvailableMoves();
+      const emptyPosition0 = availableMoves[0];
+      const emptyPosition1 = availableMoves[1];
+      const row0 = emptyPosition0[0];
+      const col0 = emptyPosition0[1];
+      const row1 = emptyPosition1[0];
+      const col1 = emptyPosition1[1];
+
+      const gameResultCount0 = gameResultCountFactory();
+      const gameResult0 = this.simulateGame(row0, col0);
+      gameResultCount0[gameResult0] = gameResultCount0[gameResult0] + this.simulationTimes;
+      result[row0][col0] = gameResultCount0;
+
+      const gameResultCount1 = gameResultCountFactory();
+      const gameResult1 = this.simulateGame(row1, col1);
+      gameResultCount1[gameResult1] = gameResultCount1[gameResult1] + this.simulationTimes;
+      result[row1][col1] = gameResultCount1;
+    } else {
+      for (let row = 0; row < TicTacToe.BOARD_SIZE; row++) {
+        for (let col = 0; col < TicTacToe.BOARD_SIZE; col++) {
+          if (board[row][col] === null) {
+            const gameResultCount = gameResultCountFactory();
+            for (let i = 0; i < this.simulationTimes; i++) {
+              const gameResult = this.simulateGame(row, col);
+              gameResultCount[gameResult]++;
+            }
+            result[row][col] = gameResultCount;
           }
-          result[row][col] = gameResultCount;
         }
       }
     }

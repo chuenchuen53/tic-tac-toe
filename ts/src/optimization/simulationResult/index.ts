@@ -1,10 +1,10 @@
 import path from "path";
 import Piscina from "piscina";
-import { setting } from "./setting";
 import ticTacToeDb from "../../TicTacToeDb";
-import type { DbRow, WorkerData, WorkerResult } from "./typing";
 import DateTimeUtil from "../DateTimeUtil";
 import { envVariables } from "../../envVariables";
+import { setting } from "./setting";
+import type { DbRow, WorkerData, WorkerResult } from "./typing";
 
 const THREADS = envVariables.THREADS;
 
@@ -18,12 +18,12 @@ async function main() {
   const start = new Date();
   console.log(`${DateTimeUtil.formatDate(start)} start main()`);
 
-  await ticTacToeDb.connectToDatabase();
+  await ticTacToeDb.connect();
 
   const generateCase = setting.cases;
 
   const promiseArr: Promise<WorkerResult>[] = [];
-  for (let simulationCase of generateCase) {
+  for (const simulationCase of generateCase) {
     for (let setNumber = 1; setNumber <= setting.numberOfSet; setNumber++) {
       const workerData: WorkerData = {
         simulationCase,
@@ -33,7 +33,7 @@ async function main() {
       };
       const promise = piscina.run(workerData).then(async (workerResult: WorkerResult) => {
         const dbRow: DbRow = { ...workerResult, createdAt: new Date() };
-        await ticTacToeDb.collections.simulationResult.insertOne(dbRow);
+        await ticTacToeDb.simulationResult.insertOne(dbRow);
         return workerResult;
       });
       promiseArr.push(promise);
@@ -42,7 +42,7 @@ async function main() {
 
   await Promise.all(promiseArr);
 
-  ticTacToeDb.client.close();
+  ticTacToeDb.close();
 
   const end = new Date();
   console.log(

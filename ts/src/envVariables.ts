@@ -16,6 +16,7 @@ if (!DB_CONN_STRING) throw new Error("DB_CONN_STRING is not set in env");
 if (!DB_NAME) throw new Error("DB_NAME is not set in env");
 if (!DB_NAME_FOR_DEV) throw new Error("DB_NAME_FOR_DEV is not set in env");
 if (!THREADS) throw new Error("THREADS is not set in env");
+if (isNaN(parseInt(THREADS))) throw new Error("THREADS must be a number");
 
 export const envVariables = Object.freeze({
   ENV,

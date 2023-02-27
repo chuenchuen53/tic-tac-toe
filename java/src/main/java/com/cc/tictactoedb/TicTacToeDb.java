@@ -14,7 +14,6 @@ public class TicTacToeDb {
     private static final String dbName = Objects.equals(EnvVariables.ENV, "prod") ? EnvVariables.DB_NAME :
             EnvVariables.DB_NAME_FOR_DEV;
     private static TicTacToeDb instance = null;
-    public MongoCollection<Document> testCollection;
     public MongoCollection<Document> simulationResult;
     public MongoCollection<Document> scores;
     private MongoClient client;
@@ -35,12 +34,15 @@ public class TicTacToeDb {
         try {
             client = MongoClients.create(TicTacToeDb.uri);
             db = client.getDatabase(TicTacToeDb.dbName);
-            testCollection = db.getCollection("testCollection");
             simulationResult = db.getCollection("simulationResult");
             scores = db.getCollection("scores");
             System.out.println("Successfully connected to database: " + TicTacToeDb.dbName);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void close() {
+        client.close();
     }
 }

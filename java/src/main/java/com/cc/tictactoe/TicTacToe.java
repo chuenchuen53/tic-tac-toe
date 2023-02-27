@@ -30,18 +30,19 @@ public class TicTacToe {
         this.filled = 0;
     }
 
-    public static TicTacToe clone(TicTacToe ticTacToe) {
+    @NotNull
+    public static TicTacToe clone(@NotNull TicTacToe ticTacToe) {
         TicTacToe clone = new TicTacToe(ticTacToe.getStartTurn());
         for (int i = 0; i < ticTacToe.board.length; i++) {
             System.arraycopy(ticTacToe.board[i], 0, clone.board[i], 0, ticTacToe.board[i].length);
         }
-        clone.turn = ticTacToe.getTurn();
+        clone.turn = ticTacToe.turn;
         clone.filled = ticTacToe.filled;
         return clone;
     }
 
     @Nullable
-    public static TicTacToeElement winnerFromGameStatus(GameStatus gameStatus) {
+    public static TicTacToeElement winnerFromGameStatus(@NotNull GameStatus gameStatus) {
         return switch (gameStatus) {
             case X_WINS -> TicTacToeElement.X;
             case O_WINS -> TicTacToeElement.O;
@@ -49,7 +50,8 @@ public class TicTacToe {
         };
     }
 
-    public static TicTacToeElement getOpponent(TicTacToeElement player) {
+    @NotNull
+    public static TicTacToeElement getOpponent(@NotNull TicTacToeElement player) {
         return player == TicTacToeElement.X ? TicTacToeElement.O : TicTacToeElement.X;
     }
 

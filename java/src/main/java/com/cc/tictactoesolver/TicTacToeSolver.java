@@ -3,7 +3,9 @@ package com.cc.tictactoesolver;
 import com.cc.optimization.BoardConfiguration;
 import com.cc.optimization.PresetSimulationResult;
 import com.cc.optimization.SimulationCase;
-import com.cc.tictactoe.*;
+import com.cc.tictactoe.GameStatus;
+import com.cc.tictactoe.TicTacToe;
+import com.cc.tictactoe.TicTacToeElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -85,8 +87,10 @@ public class TicTacToeSolver {
         for (int row = 0; row < TicTacToe.BOARD_SIZE; row++) {
             for (int col = 0; col < TicTacToe.BOARD_SIZE; col++) {
                 if (simulationResult[row][col] == null) continue;
-                GameResultCount r = simulationResult[row][col];
-                scores[row][col] = r.getLose() * loseScore + r.getDraw() * drawScore + r.getWin() * winScore;
+                GameResultCount gameResultCount = simulationResult[row][col];
+                scores[row][col] = gameResultCount.getLose() * loseScore +
+                        gameResultCount.getDraw() * drawScore +
+                        gameResultCount.getWin() * winScore;
             }
         }
 
@@ -108,22 +112,22 @@ public class TicTacToeSolver {
             result[row][col] = gameResultCount;
         } else if (ticTacToe.getFilled() == 7) {
             List<int[]> availableMoves = ticTacToe.getAvailableMoves();
-            int[] emptyPosition1 = availableMoves.get(0);
-            int[] emptyPosition2 = availableMoves.get(1);
+            int[] emptyPosition0 = availableMoves.get(0);
+            int[] emptyPosition1 = availableMoves.get(1);
+            int row0 = emptyPosition0[0];
+            int col0 = emptyPosition0[1];
             int row1 = emptyPosition1[0];
             int col1 = emptyPosition1[1];
-            int row2 = emptyPosition2[0];
-            int col2 = emptyPosition2[1];
+
+            GameResultCount gameResultCount0 = new GameResultCount();
+            GameResult gameResult0 = simulateGame(row0, col0);
+            gameResultCount0.add(gameResult0, simulationTimes);
+            result[row0][col0] = gameResultCount0;
 
             GameResultCount gameResultCount1 = new GameResultCount();
             GameResult gameResult1 = simulateGame(row1, col1);
             gameResultCount1.add(gameResult1, simulationTimes);
             result[row1][col1] = gameResultCount1;
-
-            GameResultCount gameResultCount2 = new GameResultCount();
-            GameResult gameResult2 = simulateGame(row2, col2);
-            gameResultCount2.add(gameResult2, simulationTimes);
-            result[row2][col2] = gameResultCount2;
         } else {
             for (int row = 0; row < TicTacToe.BOARD_SIZE; row++) {
                 for (int col = 0; col < TicTacToe.BOARD_SIZE; col++) {
